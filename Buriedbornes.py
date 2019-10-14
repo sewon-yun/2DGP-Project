@@ -13,13 +13,14 @@ def handle_events():
             running = False
         elif event.type == SDL_MOUSEMOTION:
             x, y = event.x, BG_HEIGHT - 1 - event.y
-        elif event.type == SDL_MOUSEBUTTONDOWN:
-            running = True
+        # elif event.type == SDL_MOUSEBUTTONDOWN:
+        #     running = True
     pass
 
 
 
 open_canvas(BG_WIDTH, BG_HEIGHT)
+
 background = load_image('background.png')
 monster_rabbit = load_image('rabbit.png')
 character_darkelf = load_image('darkelf.png')
@@ -29,6 +30,8 @@ skill_9 = load_image('skill_9.png')
 
 hide_cursor()
 running = True
+
+turn = 0
 
 x, y = BG_WIDTH // 2, BG_HEIGHT // 2
 
@@ -45,6 +48,9 @@ while running:
     skill_9.clip_draw(200, 300, 60, 50, 300, 120, 110, 100)
     skill_9.clip_draw(200, 300, 60, 50, 420, 120, 110, 100)
     skill_9.clip_draw(200, 300, 60, 50, 540, 120, 110, 100)
+    draw_rectangle(350, 210, 550, 240)
+    draw_rectangle(50, 610, 250, 640)
+
     cursor.clip_draw(0, 0, 39, 37, x + 10, y - 10, 30, 30)
     update_canvas()
 
