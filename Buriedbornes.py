@@ -3,6 +3,7 @@ import random
 
 BG_WIDTH, BG_HEIGHT = 600, 800
 i = 0
+discrimination = 0
 class Equipment:
     def __init__(self):
         self.maxhp, self.avoidability, self.accuracy, self.strength, self.dexerity, self.magic, self.faith, self.power = 0, 0, 0, 0, 0, 0, 0, 0
@@ -24,22 +25,22 @@ class Skill:
 
 
 class Character:
+    global discrimination
     def __init__(self):
-        if self.discrimination == 0:
+        if discrimination == 0:
             self.image_dark_elf = load_image('darkelf.png')
-        elif self.discrimination == 1:
+        elif discrimination == 1:
             self.image_fairy = load_image('fairy.png')
-        elif self.discrimination == 2:
+        elif discrimination == 2:
             self.image_duelist = load_image('duelist.png')
-        elif self.discrimination == 3:
+        elif discrimination == 3:
             self.image_grave_robber = load_image('grave robber.png')
-        elif self.discrimination == 4:
+        elif discrimination == 4:
             self.image_vampire = load_image('vampire.png')
-        elif self.discrimination == 5:
+        elif discrimination == 5:
             self.image_witch = load_image('witch.png')
         global i
         self.x, self.y, self.experience = 150, 200, 0
-        self.discrimination = random.randint(0, 5)
         self.avoidability, self.accuracy, self.critical_chance, self.penetration, self.critical_damage = 0, 0, 0, 0, 0
         self.strength, self.dexerity, self.magic, self.faith, self.power = 0, 0, 0, 0, 0
         self.maxhp, self.hp, self.shield, self.barrior, self.level = 0, 0, 0, 0, 0
@@ -49,20 +50,24 @@ class Character:
         self.skills = [Skill() for i in range(5)]
 
     def draw(self):
-        if self.discrimination == 0:
+        if discrimination == 0:
             self.image_dark_elf.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-        elif self.discrimination == 1:
+        elif discrimination == 1:
             self.image_fairy.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-        elif self.discrimination == 2:
+        elif discrimination == 2:
             self.image_duelist.clip_draw(0, 0, 900, 1200, self.x, self.y, 300, 400)
-        elif self.discrimination == 3:
+        elif discrimination == 3:
             self.image_grave_robber.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-        elif self.discrimination == 4:
+        elif discrimination == 4:
             self.image_vampire.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-        elif self.discrimination == 5:
+        elif discrimination == 5:
             self.image_witch.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
         if (self.hp / self.maxhp) > 0:
             draw_rectangle(350, 210, (self.hp / self.maxhp) * 200 + 350, 240)
+        if self.barrior > 0:
+            pass
+        if self.shield > 0:
+            pass
     def update(self):
         self.maxhp = self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp
         self.strength = self.armor.strength + self.weapon.strength + self.accessory.strength
@@ -73,6 +78,8 @@ class Monster:
     def __init__(self):
         self.image_rabbit = load_image('rabbit.png')
         self.x, self.y = 425, 600
+        self.hp, self.maxhp, self.barrior, self.shield = 0, 0, 0, 0
+        self.attack_damage = 0
         self.isAlive = False
         self.monster_num = 0
         self.experence = 0
@@ -81,6 +88,11 @@ class Monster:
             self.image_rabbit.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
         if (self.hp / self.maxhp) > 0:
             draw_rectangle(50, 610, (self.hp / self.maxhp) * 200 + 50, 640)
+        if self.barrior > 0:
+            pass
+        if self.shield > 0:
+            pass
+
 
 def handle_events():
     global running
@@ -91,6 +103,8 @@ def handle_events():
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
+        elif turn % 2 == 0 and event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            monsters[0].hp -= 10
         elif event.type == SDL_MOUSEMOTION:
             x, y = event.x, BG_HEIGHT - 1 - event.y
         elif event.type == SDL_MOUSEBUTTONDOWN:
@@ -111,8 +125,11 @@ running = True
 turn = 0
 i = 0
 character = Character()
+character.hp = 100
+character.maxhp = 100
 monsters = [Monster() for i in range(1)]
-
+monsters[0].hp = 100
+monsters[0].maxhp = 100
 monsters[0].isAlive = True
 
 x, y = BG_WIDTH // 2, BG_HEIGHT // 2
@@ -120,19 +137,23 @@ x, y = BG_WIDTH // 2, BG_HEIGHT // 2
 while running:
     handle_events()
     clear_canvas()
-    if turn % 2 == 0:
-        pass
     background.draw(BG_WIDTH // 2, BG_HEIGHT // 2)
+
+
+    # for skill in character.skills:
+    #     character.skill.draw()
+    hp_box.clip_draw(0, 0, 200, 100, 450, 250, 250, 125)
+    hp_box.clip_draw(0, 0, 200, 100, 150, 650, 250, 125)
     character.draw()
     for monster in monsters:
         monster.draw()
-
-    for skill in character.skills:
-        character.skill.draw()
-    hp_box.clip_draw(0, 0, 200, 100, 450, 250, 250, 125)
-    hp_box.clip_draw(0, 0, 200, 100, 150, 650, 250, 125)
-
     cursor.clip_draw(0, 0, 39, 37, x + 10, y - 10, 30, 30)
+    if turn % 2 == 0:
+        handle_events()
+        turn += 1
+    else:
+        turn += 1
+        pass
     update_canvas()
 
     delay(0.01)
