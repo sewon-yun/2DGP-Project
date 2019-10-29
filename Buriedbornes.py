@@ -1,19 +1,20 @@
 from pico2d import *
-import random
 
 BG_WIDTH, BG_HEIGHT = 600, 800
-i = 0
+i, turn = 0, 0
 discrimination = 0
+
 class Equipment:
     def __init__(self):
         self.maxhp, self.avoidability, self.accuracy, self.strength, self.dexerity, self.magic, self.faith, self.power = 0, 0, 0, 0, 0, 0, 0, 0
         self.shield, self.critical_chance, self.penetration, self.critical_damage, self.barrior = 0, 0, 0, 0, 0
     def draw(self):
         pass
+
 class Skill:
     def __init__(self):
         self.image_skill_9 = load_image('skill_9.png')
-        self.slot = 1
+        self.slot = 0
         self.skill_num = 1
         self.cooldown = 0
         self.isExist = False
@@ -21,11 +22,12 @@ class Skill:
         self.critical_chance, self.accuracy = 0, 0
     def draw(self):
         if self.isExist == True:
-            self.image_skill_9.clip_draw(200, 300, 60, 50, 60 + self.slot * 120, 120, 110, 100)
+            if self.skill_num == 1:
+                self.image_skill_9.clip_draw(200, 300, 60, 50, 60 + self.slot * 120, 120, 110, 100)
 
 
 class Character:
-    global discrimination
+    global discrimination, i
     def __init__(self):
         if discrimination == 0:
             self.image_dark_elf = load_image('darkelf.png')
@@ -39,50 +41,66 @@ class Character:
             self.image_vampire = load_image('vampire.png')
         elif discrimination == 5:
             self.image_witch = load_image('witch.png')
-        global i
+        self.font = load_font('gothic.ttf', 20)
         self.x, self.y, self.experience = 150, 200, 0
         self.avoidability, self.accuracy, self.critical_chance, self.penetration, self.critical_damage = 0, 0, 0, 0, 0
         self.strength, self.dexerity, self.magic, self.faith, self.power = 0, 0, 0, 0, 0
-        self.maxhp, self.hp, self.shield, self.barrior, self.level = 0, 0, 0, 0, 0
+        self.maxhp, self.hp, self.shield, self.barrior, self.level = 0, 0, 0, 0, 1
+        self.isAlive = False
         self.weapon = Equipment()
         self.armor = Equipment()
         self.accessory = Equipment()
         self.skills = [Skill() for i in range(5)]
+        self.skills[0].isExist = True
+        self.skills[0].strength = 2
 
     def draw(self):
-        if discrimination == 0:
-            self.image_dark_elf.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-        elif discrimination == 1:
-            self.image_fairy.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-        elif discrimination == 2:
-            self.image_duelist.clip_draw(0, 0, 900, 1200, self.x, self.y, 300, 400)
-        elif discrimination == 3:
-            self.image_grave_robber.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-        elif discrimination == 4:
-            self.image_vampire.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-        elif discrimination == 5:
-            self.image_witch.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+        if self.isAlive == True:
+            if discrimination == 0:
+                self.image_dark_elf.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            elif discrimination == 1:
+                self.image_fairy.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            elif discrimination == 2:
+                self.image_duelist.clip_draw(0, 0, 900, 1200, self.x, self.y, 300, 400)
+            elif discrimination == 3:
+                self.image_grave_robber.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            elif discrimination == 4:
+                self.image_vampire.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            elif discrimination == 5:
+                self.image_witch.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
         if (self.hp / self.maxhp) > 0:
             draw_rectangle(350, 210, (self.hp / self.maxhp) * 200 + 350, 240)
         if self.barrior > 0:
             pass
         if self.shield > 0:
             pass
+        self.font.draw(350, 275, 'Lv%3.0f' %self.level, (255, 255, 255))
+        self.skills[0].draw()
     def update(self):
-        self.maxhp = self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp
-        self.strength = self.armor.strength + self.weapon.strength + self.accessory.strength
+        # self.maxhp = self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp
+        # self.strength = self.armor.strength + self.weapon.strength + self.accessory.strength
+        if self.experience >= 1:
+            self.level += 1
+            self.experience -= 1
     @staticmethod
     def attack(character, monster):
-        pass
+        global turn
+        monster.hp -= character.strength * character.skills[0].strength
+        if monster.hp <= 0:
+            monster.isAlive = False
+            character.experience += monster.experience
+        turn += 1
+
 class Monster:
     def __init__(self):
         self.image_rabbit = load_image('rabbit.png')
+        self.font = load_font('gothic.ttf', 20)
         self.x, self.y = 425, 600
-        self.hp, self.maxhp, self.barrior, self.shield = 0, 0, 0, 0
+        self.hp, self.maxhp, self.barrior, self.shield, self.level = 0, 0, 0, 0, 1
         self.attack_damage = 0
         self.isAlive = False
         self.monster_num = 0
-        self.experence = 0
+        self.experience = 0
     def draw(self):
         if self.isAlive:
             self.image_rabbit.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
@@ -92,24 +110,31 @@ class Monster:
             pass
         if self.shield > 0:
             pass
+        self.font.draw(50, 675, 'Lv%3.0f' % self.level, (255, 255, 255))
+    @staticmethod
+    def attack(monster, character):
+        global turn
+        character.hp -= monster.attack_damage
+        if character.hp <= 0:
+            character.isAlive = False
+        turn += 1
 
 
 def handle_events():
     global running
     global x, y
+    global turn
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
-        elif turn % 2 == 0 and event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            monsters[0].hp -= 10
         elif event.type == SDL_MOUSEMOTION:
             x, y = event.x, BG_HEIGHT - 1 - event.y
-        elif event.type == SDL_MOUSEBUTTONDOWN:
-            pass
-    pass
+        elif turn % 2 == 0:
+            if event.type == SDL_MOUSEBUTTONDOWN and (5 <= x <= 115 and 70 <= y <= 170):
+                character.attack(character, monster)
 
 
 
@@ -122,40 +147,44 @@ hp_box = load_image('hp_box.png')
 hide_cursor()
 running = True
 
-turn = 0
 i = 0
+timer = 0
 character = Character()
-character.hp = 100
-character.maxhp = 100
-monsters = [Monster() for i in range(1)]
-monsters[0].hp = 100
-monsters[0].maxhp = 100
-monsters[0].isAlive = True
+character.hp, character.maxhp, character.strength = 100, 100, 10
+character.isAlive = True
+monster = Monster()
+monster.hp, monster.maxhp = 100, 100
+monster.attack_damage = 8
+monster.experience = 1
+monster.isAlive = True
 
 x, y = BG_WIDTH // 2, BG_HEIGHT // 2
 
+# main
 while running:
     handle_events()
     clear_canvas()
     background.draw(BG_WIDTH // 2, BG_HEIGHT // 2)
-
-
     # for skill in character.skills:
     #     character.skill.draw()
     hp_box.clip_draw(0, 0, 200, 100, 450, 250, 250, 125)
     hp_box.clip_draw(0, 0, 200, 100, 150, 650, 250, 125)
+    monster.draw()
     character.draw()
-    for monster in monsters:
-        monster.draw()
-    cursor.clip_draw(0, 0, 39, 37, x + 10, y - 10, 30, 30)
-    if turn % 2 == 0:
-        handle_events()
-        turn += 1
-    else:
-        turn += 1
-        pass
-    update_canvas()
+    if timer == 0:
+        if turn % 2 == 0:
+            handle_events()
+        else:
+            if monster.isAlive == True:
+                monster.attack(monster, character)
 
+    cursor.clip_draw(0, 0, 39, 37, x + 10, y - 10, 30, 30)
+    if timer == 0:
+        timer = 100
+        character.update()
+    else:
+        timer -= 1
+    update_canvas()
     delay(0.01)
 
 close_canvas()
