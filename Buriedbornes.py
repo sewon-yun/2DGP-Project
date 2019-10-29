@@ -14,6 +14,8 @@ class Equipment:
 class Skill:
     def __init__(self):
         self.image_skill_9 = load_image('skill_9.png')
+        self.font = load_font('gothic.ttf', 20)
+        self.cooldown_font = load_font('gothic.ttf', 45)
         self.slot = 0
         self.skill_num = 1
         self.cooldown = 0
@@ -24,6 +26,9 @@ class Skill:
         if self.isExist == True:
             if self.skill_num == 1:
                 self.image_skill_9.clip_draw(200, 300, 60, 50, 60 + self.slot * 120, 120, 110, 100)
+                self.font.draw(10, 55, '그림자 사격', (255, 255, 255))
+                if self.cooldown > 0:
+                    self.cooldown_font.draw(20, 120, '%3.0f'%self.cooldown, (255, 255, 255))
 
 
 class Character:
@@ -86,6 +91,7 @@ class Character:
     def attack(character, monster):
         global turn
         monster.hp -= character.strength * character.skills[0].strength
+        character.skills[0].cooldown += 1
         if monster.hp <= 0:
             monster.isAlive = False
             character.experience += monster.experience
@@ -117,6 +123,8 @@ class Monster:
         character.hp -= monster.attack_damage
         if character.hp <= 0:
             character.isAlive = False
+        if character.skills[0].cooldown > 0:
+            character.skills[0].cooldown -= 1
         turn += 1
 
 
