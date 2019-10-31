@@ -4,21 +4,13 @@ import monster
 import equipment
 import skill
 
+x = 0
+y = 0
+turn = 0
 class Character:
     global discrimination, i
     def __init__(self):
-        if discrimination == 0:
-            self.image_dark_elf = load_image('darkelf.png')
-        elif discrimination == 1:
-            self.image_fairy = load_image('fairy.png')
-        elif discrimination == 2:
-            self.image_duelist = load_image('duelist.png')
-        elif discrimination == 3:
-            self.image_grave_robber = load_image('grave robber.png')
-        elif discrimination == 4:
-            self.image_vampire = load_image('vampire.png')
-        elif discrimination == 5:
-            self.image_witch = load_image('witch.png')
+        self.image_dark_elf = load_image('darkelf.png')
         self.font = load_font('gothic.ttf', 20)
         self.x, self.y, self.experience = 150, 200, 0
         self.avoidability, self.accuracy, self.critical_chance, self.penetration, self.critical_damage = 0, 0, 0, 0, 0
@@ -34,18 +26,7 @@ class Character:
 
     def draw(self):
         if self.isAlive == True:
-            if discrimination == 0:
-                self.image_dark_elf.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-            elif discrimination == 1:
-                self.image_fairy.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-            elif discrimination == 2:
-                self.image_duelist.clip_draw(0, 0, 900, 1200, self.x, self.y, 300, 400)
-            elif discrimination == 3:
-                self.image_grave_robber.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-            elif discrimination == 4:
-                self.image_vampire.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-            elif discrimination == 5:
-                self.image_witch.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            self.image_dark_elf.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
         if (self.hp / self.maxhp) > 0:
             draw_rectangle(350, 210, (self.hp / self.maxhp) * 200 + 350, 240)
         if self.barrior > 0:
@@ -65,3 +46,18 @@ class Character:
             monster.isAlive = False
             character.experience += monster.experience
         turn += 1
+
+    def handle_events(self, event):
+        global x, y
+        global turn
+        events = get_events()
+        for event in events:
+            if event.type == SDL_QUIT:
+                running = False
+            elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+                running = False
+            elif event.type == SDL_MOUSEMOTION:
+                x, y = event.x, 800 - 1 - event.y
+            elif turn % 2 == 0:
+                if event.type == SDL_MOUSEBUTTONDOWN and (5 <= x <= 115 and 70 <= y <= 170):
+                    self.attack(self, monster)
