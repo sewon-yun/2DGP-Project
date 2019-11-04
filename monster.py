@@ -22,10 +22,10 @@ class Monster:
         if self.shield > 0:
             pass
         self.font.draw(50, 675, 'Lv%3.0f' % self.level, (255, 255, 255))
-    @staticmethod
-    def attack(monster, character):
-        global turn
-        character.hp -= monster.attack_damage
-        if character.hp <= 0:
-            character.isAlive = False
-        turn += 1
+    # @staticmethod
+    # def attack(monster, character):
+    #     global turn
+    #     character.hp -= monster.attack_damage
+    #     if character.hp <= 0:
+    #         character.isAlive = False
+    #     turn += 1
