@@ -8,6 +8,7 @@ import game_framework
 
 from background import Background
 from character import Character
+from monster import Monster
 
 name = "MainState"
 
@@ -16,17 +17,19 @@ x, y = 0, 0
 font = None
 background = None
 character = None
+monster = None
 cursor = None
 
 def enter():
-    global background, character, cursor
+    global background, character, monster, cursor
     cursor = load_image('cursor.png')
     background = Background()
     character = Character()
+    monster = Monster()
 
 def exit():
-    global background, cursor, character
-    del background, cursor, character
+    global background, cursor, character, monster
+    del background, cursor, character, monster
 
 
 def pause():
@@ -60,6 +63,7 @@ def draw():
     hide_cursor()
     background.draw()
     character.draw()
+    monster.draw()
     cursor.clip_draw(0, 0, 39, 37, x + 10, y - 10, 30, 30)
     update_canvas()
 

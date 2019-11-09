@@ -30,12 +30,10 @@ class Character:
         self.strength, self.dexerity, self.magic, self.faith, self.power = 0, 0, 0, 0, 0
         self.maxhp, self.hp, self.shield, self.barrior, self.level = 0, 0, 0, 0, 1
         self.isAlive = False
-        # self.weapon = Equipment()
-        # self.armor = Equipment()
-        # self.accessory = Equipment()
-        # self.skills[0] = Skill()
-        # self.skills[0].isExist = True
-        # self.skills[0].strength = 2
+        self.weapon = Equipment()
+        self.armor = Equipment()
+        self.accessory = Equipment()
+        self.skills = Skill()
 
     def draw(self):
         self.image_dark_elf.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
@@ -46,6 +44,7 @@ class Character:
         if self.shield > 0:
             pass
         self.font.draw(350, 275, 'Lv%3.0f' % self.level, (255, 255, 255))
+        self.skills.draw()
 
     def update(self):
         pass
