@@ -1,12 +1,16 @@
 from pico2d import *
+from monster import Monster
+
 
 class Equipment:
     def __init__(self):
         (self.maxhp, self.avoidability, self.accuracy,
          self.strength, self.dexerity, self.magic, self.faith, self.power) = 0, 0, 0, 0, 0, 0, 0, 0
         self.shield, self.critical_chance, self.penetration, self.critical_damage, self.barrior = 0, 0, 0, 0, 0
+
     def draw(self):
         pass
+
 
 class Skill:
     def __init__(self):
@@ -20,6 +24,7 @@ class Skill:
 
     def draw(self):
         self.image_skill_9.clip_draw(200, 300, 60, 50, 60 + self.slot * 120, 120, 110, 100)
+
 
 class Character:
     def __init__(self):
