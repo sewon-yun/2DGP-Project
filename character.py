@@ -5,7 +5,7 @@ from monster import Monster
 class Equipment:
     def __init__(self):
         (self.maxhp, self.avoidability, self.accuracy,
-         self.strength, self.dexerity, self.magic, self.faith, self.power) = 0, 0, 0, 0, 0, 0, 0, 0
+         self.strength, self.dexerity, self.magic, self.faith, self.power) = 50, 0, 0, 0, 0, 0, 0, 0
         self.shield, self.critical_chance, self.penetration, self.critical_damage, self.barrior = 0, 0, 0, 0, 0
 
     def draw(self):
@@ -15,6 +15,7 @@ class Equipment:
 class Skill:
     def __init__(self):
         self.image_skill_9 = load_image('skill_9.png')
+        self.font = load_font('gothic.ttf', 20)
         self.slot = 0
         self.skill_num = 1
         self.cooldown = 0
@@ -24,6 +25,7 @@ class Skill:
 
     def draw(self):
         self.image_skill_9.clip_draw(200, 300, 60, 50, 60 + self.slot * 120, 120, 110, 100)
+        self.font.draw(10, 55, '그림자 사격', (255, 255, 255))
 
 
 class Character:
@@ -33,7 +35,7 @@ class Character:
         self.x, self.y, self.experience = 150, 200, 0
         self.avoidability, self.accuracy, self.critical_chance, self.penetration, self.critical_damage = 0, 0, 0, 0, 0
         self.strength, self.dexerity, self.magic, self.faith, self.power = 0, 0, 0, 0, 0
-        self.maxhp, self.hp, self.shield, self.barrior, self.level = 0, 0, 0, 0, 1
+        self.maxhp, self.hp, self.shield, self.barrior, self.level = 0, 10, 0, 0, 1
         self.isAlive = False
         self.weapon = Equipment()
         self.armor = Equipment()
@@ -42,8 +44,8 @@ class Character:
 
     def draw(self):
         self.image_dark_elf.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
-        # if (self.hp / self.maxhp) > 0:
-        #     draw_rectangle(350, 210, (self.hp / self.maxhp) * 200 + 350, 240)
+        if (self.hp / self.maxhp) > 0 and self.maxhp != 0:
+            draw_rectangle(350, 210, (self.hp / self.maxhp) * 200 + 350, 240)
         if self.barrior > 0:
             pass
         if self.shield > 0:
@@ -52,6 +54,5 @@ class Character:
         self.skills.draw()
 
     def update(self):
-        pass
-        # self.maxhp = self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp
+        self.maxhp = self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp
         # self.strength = self.armor.strength + self.weapon.strength + self.accessory.strength
