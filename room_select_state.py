@@ -4,7 +4,6 @@ import main_state
 from room import Room
 from background import Background
 
-
 name = "RoomSelectState"
 image = None
 cursor = None
@@ -36,13 +35,12 @@ def handle_events():
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
                 game_framework.pop_state()
+                # 몬스터 테이블 구현 후 값 삽입
                 main_state.monster.isAlive = True
                 main_state.monster.hp = 100
             elif event.type == SDL_MOUSEMOTION:
                 x, y = event.x, 800 - 1 - event.y
     pass
-
-
 
 
 def draw():

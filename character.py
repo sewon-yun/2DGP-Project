@@ -1,4 +1,5 @@
 from pico2d import *
+import random
 
 image = None
 
@@ -6,7 +7,7 @@ image = None
 class Equipment:
     def __init__(self):
         (self.maxhp, self.avoidability, self.accuracy,
-         self.strength, self.dexerity, self.magic, self.faith, self.power) = 50, 0, 0, 0, 0, 0, 0, 0
+         self.strength, self.dexerity, self.magic, self.faith, self.power) = 50, 0, 0, 5, 0, 0, 0, 0
         self.shield, self.critical_chance, self.penetration, self.critical_damage, self.barrior = 0, 0, 0, 0, 0
 
     def draw(self):
@@ -36,9 +37,10 @@ class Character:
             self.image_dark_elf = load_image('darkelf.png')
             self.font = load_font('gothic.ttf', 20)
         self.x, self.y, self.experience = 150, 200, 0
-        self.avoidability, self.accuracy, self.critical_chance, self.penetration, self.critical_damage = 0, 0, 0, 0, 0
+        self.avoidability, self.accuracy, self.critical_chance, self.penetration, self.critical_damage = 0, 0, 10, 0, 2
         self.strength, self.dexerity, self.magic, self.faith, self.power = 10, 0, 0, 0, 0
         self.maxhp, self.hp, self.shield, self.barrior, self.level = 0, 100, 0, 0, 1
+        self.name = '다크엘프'
         self.isAlive = True
         self.weapon = Equipment()
         self.armor = Equipment()
@@ -54,17 +56,22 @@ class Character:
             pass
         if self.shield > 0:
             pass
-        self.font.draw(350, 275, 'Lv%3.0f' % self.level, (255, 255, 255))
+        self.font.draw(350, 275, '%s Lv%3.0f' % (self.name, self.level), (255, 255, 255))
+        self.font.draw(400, 225, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
         self.skills.draw()
 
     def update(self):
         self.maxhp = self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp
-        # self.strength = self.armor.strength + self.weapon.strength + self.accessory.strength
+        self.strength = self.armor.strength + self.weapon.strength + self.accessory.strength
 
     @staticmethod
     def attack(character, monster):
-        monster.hp -= character.strength * character.skills.strength
+        if random.randint(1, 100) <= character.critical_chance:
+            monster.hp -= character.critical_damage * character.strength * character.skills.strength
+        else:
+            monster.hp -= random.randint(80, 120) / 100 * character.strength * character.skills.strength
         if monster.hp <= 0:
+            monster.hp = 0
             monster.isAlive = False
 
 

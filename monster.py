@@ -1,4 +1,5 @@
 from pico2d import *
+import random
 
 image = None
 
@@ -11,6 +12,7 @@ class Monster:
             self.font = load_font('gothic.ttf', 20)
         self.x, self.y = 425, 600
         self.hp, self.maxhp, self.barrior, self.shield, self.level = 100, 100, 0, 0, 1
+        self.name = '래빗'
         self.attack_damage = 10
         self.isAlive = True
         self.monster_num = 0
@@ -25,11 +27,13 @@ class Monster:
             pass
         if self.shield > 0:
             pass
-        self.font.draw(50, 675, 'Lv%3.0f' % self.level, (255, 255, 255))
+        self.font.draw(50, 675, '%s Lv%3.0f' % (self.name, self.level), (255, 255, 255))
+        self.font.draw(100, 625, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
 
     @staticmethod
     def attack(monster, character):
-        character.hp -= monster.attack_damage
+        character.hp -= random.randint(80, 120) / 100 * monster.attack_damage
         if character.hp <= 0:
+            character.hp = 0
             character.isAlive = False
 

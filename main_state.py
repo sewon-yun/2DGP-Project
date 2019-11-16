@@ -74,11 +74,11 @@ def update():
     if turn % 2 == 1:
         if monster.isAlive:
             monster.attack(monster, character)
+            turn += 1
         else:
             turn = 0
             # 화면 전환
             game_framework.push_state(room_select_state)
-        turn += 1
     pass
 
 
