@@ -5,6 +5,7 @@ import os
 from pico2d import *
 
 import game_framework
+import room_select_state
 
 from background import Background
 from character import Character
@@ -20,10 +21,11 @@ character = None
 monster = None
 cursor = None
 hp_box = None
+turn = 0
 
 
 def enter():
-    global background, character, monster, cursor, hp_box
+    global background, character, monster, cursor, hp_box, turn
     if cursor == None:
         cursor = load_image('cursor.png')
     if hp_box == None:
@@ -31,6 +33,7 @@ def enter():
     background = Background()
     character = Character()
     monster = Monster()
+    turn = 0
 
 
 def exit():
@@ -47,7 +50,7 @@ def resume():
 
 
 def handle_events():
-    global x, y
+    global x, y, turn
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -56,12 +59,25 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_MOUSEMOTION:
             x, y = event.x, 800 - 1 - event.y
+        elif turn % 2 == 0:
+            if event.type == SDL_MOUSEBUTTONDOWN and (5 <= x <= 115 and 70 <= y <= 170):
+                if character.isAlive:
+                    character.attack(character, monster)
+                    turn += 1
         # else:
         #      character.handle_event(event)
 
 
 def update():
+    global turn
     character.update()
+    if turn % 2 == 1:
+        if monster.isAlive:
+            monster.attack(monster, character)
+        else:
+            turn = 0
+            # 화면 전환
+        turn += 1
     pass
 
 
@@ -75,9 +91,3 @@ def draw():
     monster.draw()
     cursor.clip_draw(0, 0, 39, 37, x + 10, y - 10, 30, 30)
     update_canvas()
-
-
-
-
-
-
