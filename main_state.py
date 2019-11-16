@@ -77,6 +77,7 @@ def update():
         else:
             turn = 0
             # 화면 전환
+            game_framework.push_state(room_select_state)
         turn += 1
     pass
 
