@@ -11,11 +11,10 @@ class Room:
             self.image_dark_elf = load_image('darkelf.png')
             self.font = load_font('gothic.ttf', 25)
 
+
     def draw(self):
-        self.image.clip_draw(0, 0, 100, 100, 75, 575, 150, 150)
-        self.image.clip_draw(0, 0, 100, 100, 225, 575, 150, 150)
-        self.image.clip_draw(0, 0, 100, 100, 375, 575, 150, 150)
-        self.image.clip_draw(0, 0, 100, 100, 525, 575, 150, 150)
+        for i in range(4):
+            self.image.clip_draw(0, 0, 100, 100, 75 + 150 * i, 575, 150, 150)
         self.image.clip_draw(0, 0, 100, 100, 155, 400, 150, 150)
         self.image.clip_draw(0, 0, 100, 100, 455, 400, 150, 150)
         self.image.clip_draw(0, 0, 100, 100, 225, 122, 150, 150)

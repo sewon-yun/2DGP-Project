@@ -6,6 +6,7 @@ from pico2d import *
 
 import game_framework
 import room_select_state
+import skill_take_state
 
 from background import Background
 from character import Character
@@ -64,8 +65,6 @@ def handle_events():
                 if character.isAlive:
                     character.attack(character, monster)
                     turn += 1
-        # else:
-        #      character.handle_event(event)
 
 
 def update():
@@ -78,7 +77,8 @@ def update():
         else:
             turn = 0
             # 화면 전환
-            game_framework.push_state(room_select_state)
+            skill_take_state.x, skill_take_state.y = x, y
+            game_framework.push_state(skill_take_state)
     pass
 
 
