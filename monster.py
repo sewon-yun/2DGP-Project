@@ -8,19 +8,22 @@ class Monster:
     def __init__(self):
         if image == None:
             self.image_rabbit = load_image('rabbit.png')
+            self.image_samurai = load_image('samurai.png')
             # 이미지 추가
             self.font = load_font('gothic.ttf', 20)
         self.x, self.y = 425, 600
         self.hp, self.maxhp, self.barrior, self.shield, self.level = 100, 100, 0, 0, 1
         self.name = '래빗'
-        self.attack_damage = 10
+        self.attack_damage, critical_chance, critical_damage = 10, 0, 0
         self.isAlive = True
-        self.monster_num = 0
         self.experience = 0
 
     def draw(self):
         if self.isAlive:
-            self.image_rabbit.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            if self.name == '래빗':
+                self.image_rabbit.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            elif self.name == '사무라이':
+                self.image_samurai.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
         if (self.hp / self.maxhp) > 0:
             draw_rectangle(50, 610, 250, 640)
             fill_rectangle(50, 610, (self.hp / self.maxhp) * 200 + 50, 640)

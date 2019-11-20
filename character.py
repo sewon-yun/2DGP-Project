@@ -12,6 +12,7 @@ class Equipment:
         (self.maxhp, self.avoidability, self.accuracy,
          self.strength, self.dexerity, self.magic, self.faith, self.power) = 50, 0, 0, 5, 0, 0, 0, 0
         self.shield, self.critical_chance, self.penetration, self.critical_damage, self.barrior = 0, 0, 0, 0, 0
+        self.lifesteal = 0
 
     def draw(self):
         pass
@@ -44,7 +45,7 @@ class Character:
             self.font_size_18 = load_font('gothic.ttf', 18)
         self.x, self.y, self.experience = 150, 200, 0
         self.avoidability, self.accuracy, self.critical_chance, self.penetration, self.critical_damage = 0, 0, 10, 0, 2
-        self.strength, self.dexerity, self.magic, self.faith, self.power = 10, 0, 0, 0, 0
+        self.strength, self.dexerity, self.magic, self.faith, self.power, self.lifesteal = 10, 0, 0, 0, 0, 0
         self.maxhp, self.hp, self.shield, self.barrior, self.startbarrior, self.level = 0, 150, 0, 0, 1, 1
         self.name = '다크엘프'
         self.isAlive = True
