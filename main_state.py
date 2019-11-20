@@ -2,7 +2,7 @@ import random
 import json
 import os
 
-from pico2d import *
+from mypico2d import *
 
 import game_framework
 import room_select_state
@@ -84,7 +84,6 @@ def update():
 
 def draw():
     clear_canvas()
-    hide_cursor()
     background.draw()
     hp_box.clip_draw(0, 0, 200, 100, 450, 250, 250, 125)
     hp_box.clip_draw(0, 0, 200, 100, 150, 650, 250, 125)

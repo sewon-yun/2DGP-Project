@@ -1,5 +1,5 @@
 import game_framework
-from pico2d import *
+from mypico2d import *
 import main_state
 import room_select_state
 from background import Background

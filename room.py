@@ -1,4 +1,4 @@
-from pico2d import *
+from mypico2d import *
 
 image = None
 
