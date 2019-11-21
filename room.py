@@ -10,6 +10,7 @@ class Room:
             self.image_hp_box = load_image('hp_box.png')
             self.image_dark_elf = load_image('darkelf.png')
             self.font = load_font('gothic.ttf', 25)
+            self.roomnum = 0
 
 
     def draw(self):
