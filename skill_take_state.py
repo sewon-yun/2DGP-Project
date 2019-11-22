@@ -3,8 +3,10 @@ from mypico2d import *
 import main_state
 import room_select_state
 from background import Background
+from cursor import Cursor
 
 name = "SkillTakeState"
+background = None
 image = None
 cursor = None
 dialog = None
@@ -17,10 +19,11 @@ x, y = 0, 0
 
 
 def enter():
-    global background, cursor, dialog, dialog_yes_or_no, font_size_30, font_size_25, font_size_20
+    global background, cursor, dialog, dialog_yes_or_no, font_size_30, font_size_25, font_size_20, x, y
     background = Background()
+    cursor = Cursor()
+    cursor.x, cursor.y = x, y
     if image == None:
-        cursor = load_image('cursor.png')
         dialog = load_image('dialog200x60.png')
         dialog_yes_or_no = load_image('dialog200x70.png')
         font_size_30 = load_font('gothic.ttf', 30)
@@ -34,7 +37,7 @@ def exit():
 
 
 def handle_events():
-    global x, y, select_times
+    global cursor, select_times, x, y
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -44,23 +47,24 @@ def handle_events():
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
                 game_framework.push_state(room_select_state)
-                room_select_state.x, room_select_state.y = x, y
+                room_select_state.x, room_select_state.y = cursor.x, cursor.y
             elif event.type == SDL_MOUSEMOTION:
                 x, y = event.x, 800 - 1 - event.y
+                cursor.x, cursor.y = x, y
             elif event.type == SDL_MOUSEBUTTONDOWN:
-                if 325 <= x <= 575 and 463 <= y <= 537:
+                if 325 <= cursor.x <= 575 and 463 <= cursor.y <= 537:
                     if select_times > 0:
                         select_times -= 1
                         # 스킬 다시 뽑기
-                elif 25 <= x <= 275 and 463 <= y <= 537:
+                elif 25 <= cursor.x <= 275 and 463 <= cursor.y <= 537:
                     # 나의 스킬 슬롯 교체
                     pass
-                elif 5 <= x <= 275 and 53 <= y <= 147:
-                    game_framework.push_state(room_select_state)
+                elif 5 <= cursor.x <= 275 and 53 <= cursor.y <= 147:
                     room_select_state.x, room_select_state.y = x, y
-                elif 325 <= x <= 595 and 53 <= y <= 147:
                     game_framework.push_state(room_select_state)
+                elif 325 <= cursor.x <= 595 and 53 <= cursor.y <= 147:
                     room_select_state.x, room_select_state.y = x, y
+                    game_framework.push_state(room_select_state)
                     # 스킬 내용 수락
 
 
@@ -78,7 +82,7 @@ def draw():
     font_size_20.draw(410, 490, '%3.0f  /%3.0f' % (select_times, max_select_times), (255, 255, 255))
     font_size_30.draw(115, 100, '무시', (255, 255, 255))
     font_size_30.draw(435, 100, '수락', (255, 255, 255))
-    cursor.clip_draw(0, 0, 39, 37, x + 10, y - 10, 30, 30)
+    cursor.draw()
     update_canvas()
 
 

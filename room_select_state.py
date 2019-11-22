@@ -3,17 +3,37 @@ from mypico2d import *
 import main_state
 from room import Room
 from background import Background
+from cursor import Cursor
+
 import random
 import game_data
 
 name = "RoomSelectState"
-image = None
 cursor = None
 play_turn = 0
 floor_prograss = 0
 start = False
-
+rooms = []
+background = None
+isCollide = False
+isBattle = False
 x, y = 0, 0
+(ZERO, FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH) = range(7)
+room_location_table = {
+    ZERO: [255, 122], FIRST: [155, 400], SECOND: [455, 400],
+    THIRD: [75, 575], FOURTH: [225, 575], FIFTH: [375, 575], SIXTH: [525, 575]
+}
+
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
 
 
 def create_monster():
@@ -35,7 +55,14 @@ def create_monster():
 
 
 def create_room():
-    pass
+    global rooms
+    rooms = [Room() for i in range(7)]
+    for i in range(7):
+        rooms[i].roomnum = i
+        rooms[i].x, rooms[i].y = room_location_table[i][0], room_location_table[i][1]
+        dicision = random.randint(0, 1)
+        if dicision == 1:
+            rooms[i].monster = True
 
 
 def save_room():
@@ -44,51 +71,65 @@ def save_room():
 
 def enter():
     hide_cursor()
-    global room, background, cursor
-    room = Room()
+    global background, cursor, x, y, isCollide, isBattle
+    isCollide = False
+    isBattle = False
+    create_room()
     background = Background()
-    if image == None:
-        cursor = load_image('cursor.png')
+    cursor = Cursor()
+    cursor.x, cursor.y = x, y
 
 
 def exit():
-    global room, cursor
-    del room, cursor
+    global rooms, cursor
+    del rooms, cursor
 
 
 def handle_events():
-    global x, y, start
+    global cursor, start, x, y, rooms, isCollide, isBattle
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
-        else:
-            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-                game_framework.quit()
-            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
-                if not start:
-                    game_framework.change_state(main_state)
-                    start = True
+        if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
+            game_framework.quit()
+        elif event.type == SDL_MOUSEMOTION and not isBattle:
+            x, y = event.x, 800 - 1 - event.y
+            cursor.x, cursor.y = x, y
+        elif event.type == SDL_MOUSEBUTTONDOWN:
+            for room in rooms:
+                if collide(cursor, room):
+                    if room.monster and start:
+                        create_monster()
+                        isBattle = True
+                    elif room.monster and not start:
+                        isBattle = True
+                    isCollide = True
+            if isCollide:
+                if isBattle:
+                    if start:
+                        main_state.cursor.x, main_state.cursor.y = x, y
+                        game_framework.pop_state()
+                        game_framework.pop_state()
+                    else:
+                        start = True
+                        game_framework.change_state(main_state)
                 else:
-                    game_framework.pop_state()
-                    game_framework.pop_state()
-                    # 몬스터 테이블 구현 후 값 삽입
-                    create_monster()
-                    main_state.x, main_state.y = x, y
-            elif event.type == SDL_MOUSEMOTION:
-                x, y = event.x, 800 - 1 - event.y
+                    create_room()
 
 
 def draw():
     clear_canvas()
     background.draw()
-    room.draw()
-    cursor.clip_draw(0, 0, 39, 37, x + 10, y - 10, 30, 30)
+    for room in rooms:
+        room.draw()
+    cursor.draw()
     update_canvas()
 
 
 def update():
     pass
+
 
 def pause():
     pass

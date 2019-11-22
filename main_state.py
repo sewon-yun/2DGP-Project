@@ -11,7 +11,7 @@ import skill_take_state
 from background import Background
 from character import Character
 from monster import Monster
-
+from cursor import Cursor
 name = "MainState"
 
 x, y = 0, 0
@@ -27,8 +27,7 @@ turn = 0
 
 def enter():
     global background, character, monster, cursor, hp_box, turn
-    if cursor == None:
-        cursor = load_image('cursor.png')
+    cursor = Cursor()
     if hp_box == None:
         hp_box = load_image('hp_box.png')
     background = Background()
@@ -51,7 +50,7 @@ def resume():
 
 
 def handle_events():
-    global x, y, turn
+    global x, y, cursor, turn
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -60,6 +59,7 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_MOUSEMOTION:
             x, y = event.x, 800 - 1 - event.y
+            cursor.x, cursor.y = x, y
         elif turn % 2 == 0:
             if event.type == SDL_MOUSEBUTTONDOWN and (5 <= x <= 115 and 70 <= y <= 170):
                 if character.isAlive:
@@ -89,5 +89,5 @@ def draw():
     hp_box.clip_draw(0, 0, 200, 100, 150, 650, 250, 125)
     character.draw()
     monster.draw()
-    cursor.clip_draw(0, 0, 39, 37, x + 10, y - 10, 30, 30)
+    cursor.draw()
     update_canvas()
