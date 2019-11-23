@@ -1,6 +1,6 @@
 import game_framework
 from mypico2d import *
-import main_state
+import battle_state
 from room import Room
 from background import Background
 from cursor import Cursor
@@ -11,6 +11,7 @@ import game_data
 save_num = 0
 name = "RoomSelectState"
 cursor = None
+font = None
 play_turn = 0
 floor_prograss = 0
 start = False
@@ -21,7 +22,7 @@ isBattle = False
 x, y = 0, 0
 (ZERO, FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH) = range(7)
 room_location_table = {
-    ZERO: [255, 122], FIRST: [155, 400], SECOND: [455, 400],
+    ZERO: [225, 100], FIRST: [155, 400], SECOND: [455, 400],
     THIRD: [75, 575], FOURTH: [225, 575], FIFTH: [375, 575], SIXTH: [525, 575]
 }
 
@@ -44,16 +45,16 @@ def create_monster():
     global play_turn
     level = int(play_turn / 10) + 1
     pick = random.randint(0, 1)
-    main_state.monster.name = game_data.monster_table[pick][0] * level
-    main_state.monster.hp = game_data.monster_table[pick][1] * level
-    main_state.monster.maxhp = game_data.monster_table[pick][1] * level
-    main_state.monster.barrior = game_data.monster_table[pick][2] * level
-    main_state.monster.shield = game_data.monster_table[pick][3] * level
-    main_state.monster.attack_damage = game_data.monster_table[pick][4] * level
-    main_state.monster.critical_chance = game_data.monster_table[pick][5] * level
-    main_state.monster.critical_damage = game_data.monster_table[pick][6] * level
-    main_state.monster.experience = game_data.monster_table[pick][7] * level
-    main_state.monster.isAlive = True
+    battle_state.monster.name = game_data.monster_table[pick][0] * level
+    battle_state.monster.hp = game_data.monster_table[pick][1] * level
+    battle_state.monster.maxhp = game_data.monster_table[pick][1] * level
+    battle_state.monster.barrior = game_data.monster_table[pick][2] * level
+    battle_state.monster.shield = game_data.monster_table[pick][3] * level
+    battle_state.monster.attack_damage = game_data.monster_table[pick][4] * level
+    battle_state.monster.critical_chance = game_data.monster_table[pick][5] * level
+    battle_state.monster.critical_damage = game_data.monster_table[pick][6] * level
+    battle_state.monster.experience = game_data.monster_table[pick][7] * level
+    battle_state.monster.isAlive = True
 
 
 def create_room(n, m):
@@ -110,19 +111,24 @@ def move_room_data(a, b):
     rooms[a].door = rooms[b].door
     rooms[a].boss = rooms[b].boss
 
+
 def enter():
     hide_cursor()
-    global background, cursor, x, y, isCollide, isBattle, rooms
+    global background, cursor, x, y, isCollide, isBattle, rooms, font, start
     isCollide = False
     isBattle = False
     background = Background()
     cursor = Cursor()
+    font = load_font('gothic.ttf', 20)
     cursor.x, cursor.y = x, y
     rooms = [Room() for i in range(7)]
     for i in range(0, 7):
         rooms[i].num = i
         rooms[i].x, rooms[i].y = room_location_table[i][0], room_location_table[i][1]
-    create_room(1, 7)
+    if not start:
+        create_room(1, 7)
+    else:
+        rooms = battle_state.rooms
 
 
 def exit():
@@ -154,14 +160,19 @@ def handle_events():
             if isCollide:
                 if isBattle:
                     if start:
-                        main_state.cursor.x, main_state.cursor.y = x, y
+                        battle_state.cursor.x, battle_state.cursor.y = x, y
+                        move_room(save_num)
+                        battle_state.rooms = rooms
                         game_framework.pop_state()
                         game_framework.pop_state()
                     else:
                         start = True
-                        game_framework.change_state(main_state)
+                        move_room(save_num)
+                        battle_state.rooms = rooms
+                        game_framework.pop_state()
                 else:
                     move_room(save_num)
+                isCollide = False
 
 
 def draw():
@@ -169,6 +180,10 @@ def draw():
     background.draw()
     for room in rooms:
         room.draw()
+    if not rooms[0].torch:
+        for i in range(4):
+            fill_rectangle_rgb(10 + i * 150, 510, 140 + i * 150, 640, 0, 0, 0)
+            font.draw(15 + i * 150, 580, '보이지 않는다', (255, 255, 255))
     cursor.draw()
     update_canvas()
 

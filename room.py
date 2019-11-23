@@ -24,10 +24,10 @@ class Room:
 
     def draw(self):
         if self.num == 0:
-            self.image.clip_draw(0, 0, 100, 100, 225, 122, 150, 150)
-            self.font.draw(185, 170, '현재 방', (255, 255, 255))
-            self.image_hp_box.clip_draw(0, 0, 200, 100, 450, 125, 250, 150)
             self.image_dark_elf.clip_draw(0, 0, 800, 800, 75, 125, 150, 150)
+            self.image.clip_draw(0, 0, 100, 100, 225, 122, 200, 200)
+            self.font.draw(185, 180, '현재 방', (255, 255, 255))
+            self.image_hp_box.clip_draw(0, 0, 200, 100, 450, 125, 250, 150)
             self.font.draw(150, 275, '두 곳 중 이동할 곳을 고르시오', (255, 255, 255))
         elif self.num == 1:
             self.image.clip_draw(0, 0, 100, 100, 155, 400, 150, 150)
@@ -42,6 +42,9 @@ class Room:
             self.image_element.clip_draw(200, 125, 60, 55, self.x - 28 + (self.rest - 1) * 60, self.y + 35, 60, 60)
             self.font_size_18.draw(self.x - 45 + (self.rest - 1) * 60, self.y + 25, '휴식', (255, 255, 0))
         if self.torch:
-            self.image_element.clip_draw(200, 125, 60, 55, self.x - 28 + (self.rest - 1) * 60, self.y + 35, 60, 60)
-            self.font_size_18.draw(self.x - 45 + (self.rest - 1) * 60, self.y + 25, '휴식', (255, 255, 0))
-
+            if self.torch < 3:
+                self.image_element.clip_draw(329, 125, 60, 55, self.x - 28 + (self.torch - 1) * 60, self.y + 35, 60, 60)
+                self.font_size_18.draw(self.x - 45 + (self.torch - 1) * 60, self.y + 25, '횃불', (255, 255, 0))
+            else:
+                self.image_element.clip_draw(330, 125, 60, 55, self.x - 28 + (self.torch - 3) * 60, self.y - 30, 60, 60)
+                self.font_size_18.draw(self.x - 45 + (self.torch - 3) * 60, self.y - 40, '횃불', (255, 255, 0))

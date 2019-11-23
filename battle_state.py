@@ -12,7 +12,8 @@ from background import Background
 from character import Character
 from monster import Monster
 from cursor import Cursor
-name = "MainState"
+from room import Room
+name = "BattleState"
 
 x, y = 0, 0
 
@@ -22,18 +23,21 @@ character = None
 monster = None
 cursor = None
 hp_box = None
+rooms = None
 turn = 0
 
 
 def enter():
-    global background, character, monster, cursor, hp_box, turn
+    global background, character, monster, cursor, hp_box, turn, rooms
     cursor = Cursor()
+    rooms = [Room() for i in range(7)]
     if hp_box == None:
         hp_box = load_image('hp_box.png')
     background = Background()
     character = Character()
     monster = Monster()
     turn = 0
+    game_framework.push_state(room_select_state)
 
 
 def exit():
