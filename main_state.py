@@ -64,6 +64,7 @@ def handle_events():
             if event.type == SDL_MOUSEBUTTONDOWN and (5 <= x <= 115 and 70 <= y <= 170):
                 if character.isAlive:
                     character.attack(character, monster)
+                    character.skills.current_cooldown += character.skills.cooldown
                     turn += 1
 
 
@@ -74,6 +75,7 @@ def update():
         if monster.isAlive:
             monster.attack(monster, character)
             turn += 1
+            character.skills.current_cooldown -= 1
         else:
             turn = 0
             # 화면 전환

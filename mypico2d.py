@@ -6,6 +6,7 @@ import math
 import json
 
 from pico2d import *
+
 # try:
 # from .sdl2 import *
 # from .sdl2.sdlimage import *
@@ -181,7 +182,7 @@ def print_fps():
     cur_time += dt
     dt = max(dt, 0.0001)
     caption = ('Pico2D Canvas (' + str(canvas_width) + 'x' + str(canvas_height) + ')' + ' %4.2f FPS' % (
-                1.0 / dt)).encode('UTF-8')
+            1.0 / dt)).encode('UTF-8')
     SDL_SetWindowTitle(window, caption)
 
 
@@ -233,13 +234,20 @@ def draw_rectangle(x1, y1, x2, y2):
     rect = SDL_Rect(int(x1), int(-y2 + canvas_height - 1), int(x2 - x1 + 1), int(y2 - y1 + 1))
     SDL_RenderDrawRect(renderer, rect)
 
+
 def draw_rectangle_rgb(x1, y1, x2, y2, r, g, b):
     SDL_SetRenderDrawColor(renderer, r, g, b, 255)
     rect = SDL_Rect(int(x1), int(-y2 + canvas_height - 1), int(x2 - x1 + 1), int(y2 - y1 + 1))
     SDL_RenderDrawRect(renderer, rect)
 
+
 def fill_rectangle(x1, y1, x2, y2):
     SDL_SetRenderDrawColor(renderer, 90, 0, 0, 255)
+    rect = SDL_Rect(int(x1), int(-y2 + canvas_height - 1), int(x2 - x1 + 1), int(y2 - y1 + 1))
+    SDL_RenderFillRect(renderer, rect)
+
+def fill_rectangle_rgb(x1, y1, x2, y2, r, g, b):
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255)
     rect = SDL_Rect(int(x1), int(-y2 + canvas_height - 1), int(x2 - x1 + 1), int(y2 - y1 + 1))
     SDL_RenderFillRect(renderer, rect)
 
@@ -504,5 +512,3 @@ def main():
 print("Pico2d is prepared.")
 if __name__ == "__main__":
     test_pico2d()
-
-

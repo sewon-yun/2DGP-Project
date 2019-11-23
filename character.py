@@ -23,9 +23,11 @@ class Skill:
         if image == None:
             self.image_skill_9 = load_image('skill_9.png')
             self.font = load_font('gothic.ttf', 20)
+            self.cooldown_font = load_font('gothic.ttf', 40)
         self.slot = 0
         self.skill_num = 1
-        self.cooldown = 0
+        self.current_cooldown = 0
+        self.cooldown = 2
         self.name = '그림자 사격'
         self.isExist = False
         self.strength, self.dexerity, self.magic, self.faith, self.power = 2, 0, 0, 0, 0
@@ -34,6 +36,12 @@ class Skill:
     def draw(self):
         self.image_skill_9.clip_draw(200, 300, 60, 50, 60 + self.slot * 120, 120, 110, 100)
         self.font.draw(self.slot + 10, 55, '%s' % self.name, (255, 255, 255))
+        if self.current_cooldown > 0:
+            fill_rectangle_rgb(18 + self.slot * 120, 75, 102 + self.slot * 120, 160, 20, 20, 20)
+        if 0 < self.current_cooldown < 10:
+            self.cooldown_font.draw(self.slot + 50, 118, '%1.0f' % self.current_cooldown, (255, 255, 255))
+        if 10 <= self.current_cooldown:
+            self.cooldown_font.draw(self.slot + 35, 118, '%1.0f' % self.current_cooldown, (255, 255, 255))
 
 
 class Character:
