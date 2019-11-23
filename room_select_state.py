@@ -1,6 +1,7 @@
 import game_framework
-from mypico2d import *
 import battle_state
+
+from mypico2d import *
 from room import Room
 from background import Background
 from cursor import Cursor
@@ -8,8 +9,9 @@ from cursor import Cursor
 import random
 import game_data
 
-save_num = 0
 name = "RoomSelectState"
+
+save_num = 0
 cursor = None
 font = None
 play_turn = 0
@@ -20,7 +22,9 @@ background = None
 isCollide = False
 isBattle = False
 x, y = 0, 0
+
 (ZERO, FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH) = range(7)
+
 room_location_table = {
     ZERO: [225, 100], FIRST: [155, 400], SECOND: [455, 400],
     THIRD: [75, 575], FOURTH: [225, 575], FIFTH: [375, 575], SIXTH: [525, 575]
@@ -45,15 +49,16 @@ def create_monster():
     global play_turn
     level = int(play_turn / 10) + 1
     pick = random.randint(0, 1)
-    battle_state.monster.name = game_data.monster_table[pick][0] * level
-    battle_state.monster.hp = game_data.monster_table[pick][1] * level
-    battle_state.monster.maxhp = game_data.monster_table[pick][1] * level
-    battle_state.monster.barrior = game_data.monster_table[pick][2] * level
-    battle_state.monster.shield = game_data.monster_table[pick][3] * level
-    battle_state.monster.attack_damage = game_data.monster_table[pick][4] * level
-    battle_state.monster.critical_chance = game_data.monster_table[pick][5] * level
-    battle_state.monster.critical_damage = game_data.monster_table[pick][6] * level
-    battle_state.monster.experience = game_data.monster_table[pick][7] * level
+    battle_state.monster.name = game_data.monster_table[pick][0]
+    battle_state.monster.hp = game_data.monster_table[pick][1] * (1.02 ** level)
+    battle_state.monster.maxhp = game_data.monster_table[pick][1] * (1.02 ** level)
+    battle_state.monster.barrior = game_data.monster_table[pick][2] * (1.02 ** level)
+    battle_state.monster.shield = game_data.monster_table[pick][3] * (1.02 ** level)
+    battle_state.monster.attack_damage = game_data.monster_table[pick][4] * (1.02 ** level)
+    battle_state.monster.critical_chance = game_data.monster_table[pick][5] * (1.02 ** level)
+    battle_state.monster.critical_damage = game_data.monster_table[pick][6] * (1.02 ** level)
+    battle_state.monster.experience = game_data.monster_table[pick][7] * (1.02 ** level)
+    battle_state.monster.level = level
     battle_state.monster.isAlive = True
 
 
@@ -61,19 +66,39 @@ def create_room(n, m):
     global rooms
     for i in range(n, m):
         # elements = self.monster, self.swamp, self.rest, self.electric_current, self.door, self.torch, self.boss,
-        # self.corpse,self.fair_wind
-        dicision = random.randint(1, 100)
-        if dicision <= 70:
-            rooms[i].monster = 1
+        # self.box,self.fair_wind
+        if random.randint(1, 100) <= 10:
+            rooms[i].door = 1
+        if random.randint(1, 100) <= 70:
+            if random.randint(1, 100) < play_turn:
+                rooms[i].boss = 1
+            else:
+                rooms[i].monster = 1
             rooms[i].element += 1
-        dicision = random.randint(1, 100)
-        if dicision <= 20:
+
+        if random.randint(1, 100) <= 20:
             rooms[i].rest = rooms[i].element + 1
             rooms[i].element += 1
-        dicision = random.randint(1, 100)
-        if dicision <= 30:
+
+        if random.randint(1, 100) <= 30:
             rooms[i].torch = rooms[i].element + 1
             rooms[i].element += 1
+
+        if random.randint(1, 100) <= 30:
+            rooms[i].box = rooms[i].element + 1
+            rooms[i].element += 1
+
+        if random.randint(1, 100) <= 30 and rooms[i].element < 4:
+            if random.randint(0, 1) == 0:
+                rooms[i].swamp = rooms[i].element + 1
+            else:
+                rooms[i].fair_wind = rooms[i].element + 1
+            rooms[i].element += 1
+
+        if random.randint(1, 100) <= 30 and rooms[i].element < 4:
+            rooms[i].electric_current = rooms[i].element + 1
+            rooms[i].element += 1
+
 
 
 def move_room(k):
@@ -93,7 +118,7 @@ def move_room(k):
         rooms[i].torch = 0
         rooms[i].element = 0
         rooms[i].fair_wind = 0
-        rooms[i].corpse = 0
+        rooms[i].box = 0
         rooms[i].door = 0
         rooms[i].boss = 0
     create_room(3, 7)
@@ -107,16 +132,17 @@ def move_room_data(a, b):
     rooms[a].torch = rooms[b].torch
     rooms[a].element = rooms[b].element
     rooms[a].fair_wind = rooms[b].fair_wind
-    rooms[a].corpse = rooms[b].corpse
+    rooms[a].box = rooms[b].box
     rooms[a].door = rooms[b].door
     rooms[a].boss = rooms[b].boss
 
 
 def enter():
     hide_cursor()
-    global background, cursor, x, y, isCollide, isBattle, rooms, font, start
+    global background, cursor, x, y, isCollide, isBattle, rooms, font, start, play_turn
     isCollide = False
     isBattle = False
+    play_turn = battle_state.turn
     background = Background()
     cursor = Cursor()
     font = load_font('gothic.ttf', 20)
@@ -149,7 +175,7 @@ def handle_events():
             cursor.x, cursor.y = x, y
         elif event.type == SDL_MOUSEBUTTONDOWN:
             for room in rooms:
-                if collide(cursor, room) and room.num < 3:
+                if collide(cursor, room) and 0 < room.num < 3:
                     if room.monster and start:
                         create_monster()
                         isBattle = True
@@ -172,6 +198,8 @@ def handle_events():
                         game_framework.pop_state()
                 else:
                     move_room(save_num)
+                    if rooms[0].rest and start:
+                        battle_state.character.hp = battle_state.character.maxhp
                 isCollide = False
 
 

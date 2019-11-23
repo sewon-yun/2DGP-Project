@@ -81,8 +81,10 @@ def update():
             turn += 1
             character.skills.current_cooldown -= 1
         else:
-            turn = 0
+            turn += 1
             # 화면 전환
+            if rooms[0].rest:
+                character.hp = character.maxhp
             skill_take_state.x, skill_take_state.y = x, y
             game_framework.push_state(skill_take_state)
     pass
