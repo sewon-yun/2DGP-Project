@@ -13,6 +13,7 @@ from character import Character
 from monster import Monster
 from cursor import Cursor
 from room import Room
+
 name = "BattleState"
 
 x, y = 0, 0
@@ -68,7 +69,12 @@ def handle_events():
             if event.type == SDL_MOUSEBUTTONDOWN and (5 <= x <= 115 and 70 <= y <= 170):
                 if character.isAlive:
                     character.attack(character, monster)
-                    character.skills.current_cooldown += character.skills.cooldown
+                    if rooms[0].fair_wind:
+                        character.skills[0].current_cooldown += 1
+                    elif rooms[0].swamp:
+                        character.skills[0].current_cooldown += character.skills[0].cooldown + 1
+                    else:
+                        character.skills[0].current_cooldown += character.skills[0].cooldown
                     turn += 1
 
 
@@ -79,7 +85,7 @@ def update():
         if monster.isAlive:
             monster.attack(monster, character)
             turn += 1
-            character.skills.current_cooldown -= 1
+            character.skills[0].current_cooldown -= 1
         else:
             turn += 1
             # 화면 전환

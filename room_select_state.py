@@ -189,12 +189,16 @@ def handle_events():
                         battle_state.cursor.x, battle_state.cursor.y = x, y
                         move_room(save_num)
                         battle_state.rooms = rooms
+                        if rooms[0].door:
+                            battle_state.turn += 1
                         game_framework.pop_state()
                         game_framework.pop_state()
                     else:
                         start = True
                         move_room(save_num)
                         battle_state.rooms = rooms
+                        if rooms[0].door:
+                            battle_state.turn += 1
                         game_framework.pop_state()
                 else:
                     move_room(save_num)

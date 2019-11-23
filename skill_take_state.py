@@ -15,14 +15,17 @@ font_size_20 = None
 font_size_25 = None
 font_size_30 = None
 max_select_times, select_times = 5, 5
+num = 0
 x, y = 0, 0
 
 
 def enter():
-    global background, cursor, dialog, dialog_yes_or_no, font_size_30, font_size_25, font_size_20, x, y
+    global background, cursor, dialog, dialog_yes_or_no, font_size_30, font_size_25, font_size_20, x, y, num
     background = Background()
     cursor = Cursor()
     cursor.x, cursor.y = x, y
+    num = 0
+    battle_state.character.skills[0].skill_select = True
     if image == None:
         dialog = load_image('dialog200x60.png')
         dialog_yes_or_no = load_image('dialog200x70.png')
@@ -37,7 +40,7 @@ def exit():
 
 
 def handle_events():
-    global cursor, select_times, x, y
+    global cursor, select_times, x, y, num
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -57,7 +60,11 @@ def handle_events():
                         select_times -= 1
                         # 스킬 다시 뽑기
                 elif 25 <= cursor.x <= 275 and 463 <= cursor.y <= 537:
-                    # 나의 스킬 슬롯 교체
+                    battle_state.character.skills[num].skill_select = False
+                    num += 1
+                    if num == 5:
+                        num = 0
+                    battle_state.character.skills[num].skill_select = True
                     pass
                 elif 5 <= cursor.x <= 275 and 53 <= cursor.y <= 147:
                     room_select_state.x, room_select_state.y = x, y
@@ -66,8 +73,6 @@ def handle_events():
                     room_select_state.x, room_select_state.y = x, y
                     game_framework.push_state(room_select_state)
                     # 스킬 내용 수락
-
-
 
 
 def draw():
@@ -82,6 +87,7 @@ def draw():
     font_size_20.draw(410, 490, '%3.0f  /%3.0f' % (select_times, max_select_times), (255, 255, 255))
     font_size_30.draw(115, 100, '무시', (255, 255, 255))
     font_size_30.draw(435, 100, '수락', (255, 255, 255))
+    battle_state.character.skills[num].draw()
     cursor.draw()
     update_canvas()
 

@@ -23,6 +23,7 @@ class Skill:
         if image == None:
             self.image_skill_9 = load_image('skill_9.png')
             self.font = load_font('gothic.ttf', 20)
+            self.font_size_25 = load_font('gothic.ttf', 25)
             self.cooldown_font = load_font('gothic.ttf', 40)
         self.slot = 0
         self.skill_num = 1
@@ -32,16 +33,21 @@ class Skill:
         self.isExist = False
         self.strength, self.dexerity, self.magic, self.faith, self.power = 2, 0, 0, 0, 0
         self.critical_chance, self.accuracy = 0, 0
+        self.skill_select = False
 
     def draw(self):
-        self.image_skill_9.clip_draw(200, 300, 60, 50, 60 + self.slot * 120, 120, 110, 100)
-        self.font.draw(self.slot + 10, 55, '%s' % self.name, (255, 255, 255))
-        if self.current_cooldown > 0:
-            fill_rectangle_rgb(18 + self.slot * 120, 75, 102 + self.slot * 120, 160, 20, 20, 20)
-        if 0 < self.current_cooldown < 10:
-            self.cooldown_font.draw(self.slot + 50, 118, '%1.0f' % self.current_cooldown, (255, 255, 255))
-        if 10 <= self.current_cooldown:
-            self.cooldown_font.draw(self.slot + 35, 118, '%1.0f' % self.current_cooldown, (255, 255, 255))
+        if self.skill_select:
+            self.image_skill_9.clip_draw(200, 300, 60, 50, 150, 350, 150, 140)
+            self.font_size_25.draw(90, 250, '%s' % self.name, (255, 255, 255))
+        else:
+            self.image_skill_9.clip_draw(200, 300, 60, 50, 60 + self.slot * 120, 120, 110, 100)
+            self.font.draw(self.slot * 120 + 10, 55, '%s' % self.name, (255, 255, 255))
+            if self.current_cooldown > 0:
+                fill_rectangle_rgb(18 + self.slot * 120, 75, 102 + self.slot * 120, 160, 20, 20, 20)
+            if 0 < self.current_cooldown < 10:
+                self.cooldown_font.draw(self.slot * 120 + 50, 118, '%1.0f' % self.current_cooldown, (255, 255, 255))
+            if 10 <= self.current_cooldown:
+                self.cooldown_font.draw(self.slot * 120 + 35, 118, '%1.0f' % self.current_cooldown, (255, 255, 255))
 
 
 class Character:
@@ -60,7 +66,9 @@ class Character:
         self.weapon = Equipment()
         self.armor = Equipment()
         self.accessory = Equipment()
-        self.skills = Skill()
+        self.skills = [Skill() for i in range(5)]
+        for i in range(5):
+            self.skills[i].slot = i
 
     def draw(self):
         if self.isAlive:
@@ -86,7 +94,8 @@ class Character:
                 self.font_size_15.draw(370, 225, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
             else:
                 self.font_size_18.draw(390, 225, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
-        self.skills.draw()
+        for i in range(5):
+            self.skills[i].draw()
 
     def update(self):
         self.maxhp = self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp
@@ -95,9 +104,9 @@ class Character:
     @staticmethod
     def attack(character, monster):
         if random.randint(1, 100) <= character.critical_chance:
-            monster.hp -= character.critical_damage * character.strength * character.skills.strength
+            monster.hp -= character.critical_damage * character.strength * character.skills[0].strength
         else:
-            monster.hp -= random.randint(80, 120) / 100 * character.strength * character.skills.strength
+            monster.hp -= random.randint(80, 120) / 100 * character.strength * character.skills[0].strength
         if monster.hp <= 0:
             monster.hp = 0
             monster.isAlive = False
