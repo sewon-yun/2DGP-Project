@@ -36,9 +36,12 @@ class Room:
         elif 3 <= self.num <= 6:
             self.image.clip_draw(0, 0, 100, 100, 75 + 150 * (self.num - 3), 575, 150, 150)
         if self.monster:
-            self.image_monster_event.clip_draw(270, 210, 60, 55, self.x - 25, self.y + 25, 60, 60)
-            self.font_size_18.draw(self.x - 45, self.y + 25, '마물', (255, 255, 255))
+            self.image_monster_event.clip_draw(270, 210, 60, 55, self.x - 28, self.y + 35, 60, 60)
+            self.font_size_18.draw(self.x - 45, self.y + 25, '마물', (255, 255, 0))
         if self.rest:
-            self.image_element.clip_draw(200, 130, 60, 55, self.x - 25 + (self.rest - 1) * 60, self.y + 25, 60, 60)
-            self.font_size_18.draw(self.x - 45 + (self.rest - 1) * 60, self.y + 25, '휴식', (255, 255, 255))
+            self.image_element.clip_draw(200, 125, 60, 55, self.x - 28 + (self.rest - 1) * 60, self.y + 35, 60, 60)
+            self.font_size_18.draw(self.x - 45 + (self.rest - 1) * 60, self.y + 25, '휴식', (255, 255, 0))
+        if self.torch:
+            self.image_element.clip_draw(200, 125, 60, 55, self.x - 28 + (self.rest - 1) * 60, self.y + 35, 60, 60)
+            self.font_size_18.draw(self.x - 45 + (self.rest - 1) * 60, self.y + 25, '휴식', (255, 255, 0))
 

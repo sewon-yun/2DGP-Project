@@ -8,6 +8,7 @@ from cursor import Cursor
 import random
 import game_data
 
+save_num = 0
 name = "RoomSelectState"
 cursor = None
 play_turn = 0
@@ -23,6 +24,7 @@ room_location_table = {
     ZERO: [255, 122], FIRST: [155, 400], SECOND: [455, 400],
     THIRD: [75, 575], FOURTH: [225, 575], FIFTH: [375, 575], SIXTH: [525, 575]
 }
+
 
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
@@ -57,12 +59,10 @@ def create_monster():
 def create_room(n, m):
     global rooms
     for i in range(n, m):
-        rooms[i].num = i
-        rooms[i].x, rooms[i].y = room_location_table[i][0], room_location_table[i][1]
         # elements = self.monster, self.swamp, self.rest, self.electric_current, self.door, self.torch, self.boss,
         # self.corpse,self.fair_wind
         dicision = random.randint(1, 100)
-        if dicision <= 60:
+        if dicision <= 70:
             rooms[i].monster = 1
             rooms[i].element += 1
         dicision = random.randint(1, 100)
@@ -75,18 +75,40 @@ def create_room(n, m):
             rooms[i].element += 1
 
 
-def save_room(i):
-    if i == 1:
-        rooms[0], rooms[1], rooms[2] = rooms[1], rooms[3], rooms[4]
-        for i in range(3):
-            rooms[i].num = i
-            rooms[i].x, rooms[i].y = room_location_table[i][0], room_location_table[i][1]
-    elif i == 2:
+def move_room(k):
+    if k == 1:
+        move_room_data(0, 1)
+        move_room_data(1, 3)
+        move_room_data(2, 4)
+    elif k == 2:
+        move_room_data(0, 2)
+        move_room_data(1, 5)
+        move_room_data(2, 6)
+    for i in range(3, 7):
+        rooms[i].monster = 0
+        rooms[i].rest = 0
+        rooms[i].swamp = 0
+        rooms[i].electric_current = 0
+        rooms[i].torch = 0
+        rooms[i].element = 0
+        rooms[i].fair_wind = 0
+        rooms[i].corpse = 0
+        rooms[i].door = 0
+        rooms[i].boss = 0
+    create_room(3, 7)
 
-        for i in range(3):
-            rooms[i].num = i
-            rooms[i].x, rooms[i].y = room_location_table[i][0], room_location_table[i][1]
 
+def move_room_data(a, b):
+    rooms[a].monster = rooms[b].monster
+    rooms[a].rest = rooms[b].rest
+    rooms[a].swamp = rooms[b].swamp
+    rooms[a].electric_current = rooms[b].electric_current
+    rooms[a].torch = rooms[b].torch
+    rooms[a].element = rooms[b].element
+    rooms[a].fair_wind = rooms[b].fair_wind
+    rooms[a].corpse = rooms[b].corpse
+    rooms[a].door = rooms[b].door
+    rooms[a].boss = rooms[b].boss
 
 def enter():
     hide_cursor()
@@ -97,8 +119,10 @@ def enter():
     cursor = Cursor()
     cursor.x, cursor.y = x, y
     rooms = [Room() for i in range(7)]
+    for i in range(0, 7):
+        rooms[i].num = i
+        rooms[i].x, rooms[i].y = room_location_table[i][0], room_location_table[i][1]
     create_room(1, 7)
-
 
 
 def exit():
@@ -107,7 +131,7 @@ def exit():
 
 
 def handle_events():
-    global cursor, start, x, y, rooms, isCollide, isBattle
+    global cursor, start, x, y, rooms, isCollide, isBattle, save_num
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -119,15 +143,14 @@ def handle_events():
             cursor.x, cursor.y = x, y
         elif event.type == SDL_MOUSEBUTTONDOWN:
             for room in rooms:
-                if collide(cursor, room):
-                    if room.num < 3:
-                        if room.monster and start:
-                            create_monster()
-                            isBattle = True
-                        elif room.monster and not start:
-                            isBattle = True
-                        isCollide = True
-                        save_num = room.num
+                if collide(cursor, room) and room.num < 3:
+                    if room.monster and start:
+                        create_monster()
+                        isBattle = True
+                    elif room.monster and not start:
+                        isBattle = True
+                    isCollide = True
+                    save_num = room.num
             if isCollide:
                 if isBattle:
                     if start:
@@ -138,8 +161,7 @@ def handle_events():
                         start = True
                         game_framework.change_state(main_state)
                 else:
-                    save_room(save_num)
-                    create_room(3, 7)
+                    move_room(save_num)
 
 
 def draw():
