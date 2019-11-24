@@ -19,6 +19,8 @@ class Equipment:
 class Skill:
     def __init__(self):
         if image == None:
+            self.image_skill_1 = load_image('skill_1.png')
+            self.image_skill_7 = load_image('skill_7.png')
             self.image_skill_8 = load_image('skill_8.png')
             self.image_skill_9 = load_image('skill_9.png')
             self.font = load_font('gothic.ttf', 20)
@@ -37,8 +39,27 @@ class Skill:
 
     def draw(self):
         if self.skill_select:
-            self.image_skill_9.clip_draw(200, 300, 60, 50, 150, 350, 150, 140)
-            self.font_size_25.draw(90, 250, '%s' % self.name, (255, 255, 255))
+            if self.name == '그림자 사격':
+                self.image_skill_9.clip_draw(200, 300, 60, 50, 150, 350, 110, 100)
+                self.font_size_25.draw(90, 270, '%s' % self.name, (255, 255, 255))
+            elif self.name == '회복':
+                self.image_skill_8.clip_draw(80, 213, 60, 50, 150, 350, 110, 100)
+                self.font_size_25.draw(120, 270, '%s' % self.name, (255, 255, 255))
+            elif self.name == '완전 회복' or self.name == '상급 회복':
+                self.image_skill_8.clip_draw(80, 213, 60, 50, 150, 350, 110, 100)
+                self.font_size_25.draw(95, 270, '%s' % self.name, (255, 255, 255))
+            elif self.name == '정조준':
+                self.image_skill_1.clip_draw(80, 293, 60, 50, 150, 350, 110, 100)
+                self.font_size_25.draw(110, 270, '%s' % self.name, (255, 255, 255))
+            elif self.name == '사격':
+                self.image_skill_7.clip_draw(335, 40, 60, 52, 150, 350, 100, 100)
+                self.font_size_25.draw(120, 270, '%s' % self.name, (255, 255, 255))
+            elif self.name == '암습':
+                self.image_skill_7.clip_draw(270, 213, 60, 52, 150, 350, 100, 100)
+                self.font_size_25.draw(120, 270, '%s' % self.name, (255, 255, 255))
+            elif self.name == '응급 처치':
+                self.image_skill_8.clip_draw(267, 300, 60, 50, 150, 350, 110, 100)
+                self.font_size_25.draw(95, 270, '%s' % self.name, (255, 255, 255))
         else:
             if self.isExist:
                 if self.name == '그림자 사격':
@@ -47,7 +68,22 @@ class Skill:
                 elif self.name == '회복':
                     self.image_skill_8.clip_draw(80, 213, 60, 50, 60 + self.slot * 120, 120 - 5, 110, 100)
                     self.font.draw(self.slot * 120 + 35, 55, '%s' % self.name, (255, 255, 255))
-                    
+                elif self.name == '완전 회복' or self.name == '상급 회복':
+                    self.image_skill_8.clip_draw(80, 213, 60, 50, 60 + self.slot * 120, 120 - 4, 110, 100)
+                    self.font.draw(self.slot * 120 + 13, 55, '%s' % self.name, (255, 255, 255))
+                elif self.name == '정조준':
+                    self.image_skill_1.clip_draw(80, 293, 60, 50, 60 + self.slot * 120, 120 - 4, 110, 100)
+                    self.font.draw(self.slot * 120 + 25, 55, '%s' % self.name, (255, 255, 255))
+                elif self.name == '사격':
+                    self.image_skill_7.clip_draw(335, 40, 60, 52, 57 + self.slot * 120, 120 - 3, 100, 100)
+                    self.font.draw(self.slot * 120 + 35, 55, '%s' % self.name, (255, 255, 255))
+                elif self.name == '암습':
+                    self.image_skill_7.clip_draw(270, 213, 60, 52, 60 + self.slot * 120, 120 - 3, 100, 100)
+                    self.font.draw(self.slot * 120 + 35, 55, '%s' % self.name, (255, 255, 255))
+                elif self.name == '응급 처치':
+                    self.image_skill_8.clip_draw(267, 300, 60, 50, 63 + self.slot * 120, 120 - 2, 110, 100)
+                    self.font.draw(self.slot * 120 + 15, 55, '%s' % self.name, (255, 255, 255))
+
                 if self.current_cooldown > 0:
                     fill_rectangle_rgb(18 + self.slot * 120, 75, 102 + self.slot * 120, 160, 20, 20, 20)
                 if 0 < self.current_cooldown < 10:
@@ -89,7 +125,10 @@ class Character:
         for i in range(5):
             self.skills[i].slot = i
         self.skills[0].create(0)
-        self.skills[1].create(7)
+        self.skills[1].create(6)
+        self.skills[2].create(2)
+        self.skills[3].create(1)
+        self.skills[4].create(3)
 
     def draw(self):
         if self.isAlive:
