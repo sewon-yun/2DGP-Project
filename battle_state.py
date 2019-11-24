@@ -101,6 +101,7 @@ def update():
                 if character.skills[i].current_cooldown:
                     character.skills[i].current_cooldown -= 1
             # 화면 전환
+            character.level_up(0)
             if rooms[0].rest:
                 character.hp = character.maxhp
             if rooms[0].box:
