@@ -48,7 +48,7 @@ def create_monster():
     #        [ 0     1     2        3          4               5                 6             7    ]
     global play_turn
     level = int(play_turn / 10) + 1
-    pick = random.randint(0, 1)
+    pick = random.randint(0, 8)
     battle_state.monster.name = game_data.monster_table[pick][0]
     battle_state.monster.hp = game_data.monster_table[pick][1] * (1.02 ** level)
     battle_state.monster.maxhp = game_data.monster_table[pick][1] * (1.02 ** level)

@@ -66,16 +66,20 @@ def handle_events():
             x, y = event.x, 800 - 1 - event.y
             cursor.x, cursor.y = x, y
         elif turn % 2 == 0:
-            if event.type == SDL_MOUSEBUTTONDOWN and (5 <= x <= 115 and 70 <= y <= 170):
-                if character.isAlive:
+            if event.type == SDL_MOUSEBUTTONDOWN and (5 <= x <= 115 and 70 <= y <= 170) \
+                    and character.skills[0].isExist and character.isAlive:
+                character.skills[0].isActive = True
+                if character.skills[0].kinds == 0:
                     character.attack(character, monster)
-                    if rooms[0].fair_wind:
-                        character.skills[0].current_cooldown += 1
-                    elif rooms[0].swamp:
-                        character.skills[0].current_cooldown += character.skills[0].cooldown + 1
-                    else:
-                        character.skills[0].current_cooldown += character.skills[0].cooldown
-                    turn += 1
+                else:
+                    character.heal()
+                if rooms[0].fair_wind:
+                    character.skills[0].current_cooldown += 1
+                elif rooms[0].swamp:
+                    character.skills[0].current_cooldown += character.skills[0].cooldown + 1
+                else:
+                    character.skills[0].current_cooldown += character.skills[0].cooldown
+                turn += 1
 
 
 def update():

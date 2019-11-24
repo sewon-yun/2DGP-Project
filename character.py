@@ -1,16 +1,14 @@
 from mypico2d import *
 import random
-
+import game_data
 
 image = None
-
-
 
 
 class Equipment:
     def __init__(self):
         (self.maxhp, self.avoidability, self.accuracy,
-         self.strength, self.dexerity, self.magic, self.faith, self.power) = 50, 0, 0, 5, 0, 0, 0, 0
+         self.strength, self.dexerity, self.magic, self.faith, self.power) = 50, 0, 0, 0, 5, 0, 0, 0
         self.shield, self.critical_chance, self.penetration, self.critical_damage, self.barrior = 0, 0, 0, 0, 0
         self.lifesteal = 0
 
@@ -21,18 +19,20 @@ class Equipment:
 class Skill:
     def __init__(self):
         if image == None:
+            self.image_skill_8 = load_image('skill_8.png')
             self.image_skill_9 = load_image('skill_9.png')
             self.font = load_font('gothic.ttf', 20)
             self.font_size_25 = load_font('gothic.ttf', 25)
             self.cooldown_font = load_font('gothic.ttf', 40)
         self.slot = 0
-        self.skill_num = 1
         self.current_cooldown = 0
-        self.cooldown = 2
+        self.cooldown = 1
         self.name = '그림자 사격'
         self.isExist = False
-        self.strength, self.dexerity, self.magic, self.faith, self.power = 2, 0, 0, 0, 0
-        self.critical_chance, self.accuracy = 0, 0
+        self.isActive = False
+        self.strength, self.dexerity, self.magic, self.faith, self.power = 0, 2, 0, 0, 0
+        self.kinds = 0
+        self.accuracy = False
         self.skill_select = False
 
     def draw(self):
@@ -40,14 +40,33 @@ class Skill:
             self.image_skill_9.clip_draw(200, 300, 60, 50, 150, 350, 150, 140)
             self.font_size_25.draw(90, 250, '%s' % self.name, (255, 255, 255))
         else:
-            self.image_skill_9.clip_draw(200, 300, 60, 50, 60 + self.slot * 120, 120, 110, 100)
-            self.font.draw(self.slot * 120 + 10, 55, '%s' % self.name, (255, 255, 255))
-            if self.current_cooldown > 0:
-                fill_rectangle_rgb(18 + self.slot * 120, 75, 102 + self.slot * 120, 160, 20, 20, 20)
-            if 0 < self.current_cooldown < 10:
-                self.cooldown_font.draw(self.slot * 120 + 50, 118, '%1.0f' % self.current_cooldown, (255, 255, 255))
-            if 10 <= self.current_cooldown:
-                self.cooldown_font.draw(self.slot * 120 + 35, 118, '%1.0f' % self.current_cooldown, (255, 255, 255))
+            if self.isExist:
+                if self.name == '그림자 사격':
+                    self.image_skill_9.clip_draw(200, 300, 60, 50, 60 + self.slot * 120, 120, 110, 100)
+                    self.font.draw(self.slot * 120 + 10, 55, '%s' % self.name, (255, 255, 255))
+                elif self.name == '회복':
+                    self.image_skill_8.clip_draw(80, 213, 60, 50, 60 + self.slot * 120, 120 - 5, 110, 100)
+                    self.font.draw(self.slot * 120 + 35, 55, '%s' % self.name, (255, 255, 255))
+                    
+                if self.current_cooldown > 0:
+                    fill_rectangle_rgb(18 + self.slot * 120, 75, 102 + self.slot * 120, 160, 20, 20, 20)
+                if 0 < self.current_cooldown < 10:
+                    self.cooldown_font.draw(self.slot * 120 + 50, 118, '%1.0f' % self.current_cooldown, (255, 255, 255))
+                if 10 <= self.current_cooldown:
+                    self.cooldown_font.draw(self.slot * 120 + 35, 118, '%1.0f' % self.current_cooldown, (255, 255, 255))
+
+    def create(self, pick):
+        self.current_cooldown = 0
+        self.cooldown = game_data.skill_table[pick][0]
+        self.name = game_data.skill_table[pick][1]
+        self.strength = game_data.skill_table[pick][2]
+        self.dexerity = game_data.skill_table[pick][3]
+        self.magic = game_data.skill_table[pick][4]
+        self.faith = game_data.skill_table[pick][5]
+        self.power = game_data.skill_table[pick][6]
+        self.accuracy = game_data.skill_table[pick][7]
+        self.kinds = game_data.skill_table[pick][8]
+        self.isExist = True
 
 
 class Character:
@@ -59,7 +78,7 @@ class Character:
             self.font_size_18 = load_font('gothic.ttf', 18)
         self.x, self.y, self.experience = 150, 200, 0
         self.avoidability, self.accuracy, self.critical_chance, self.penetration, self.critical_damage = 0, 0, 10, 0, 2
-        self.strength, self.dexerity, self.magic, self.faith, self.power, self.lifesteal = 10, 0, 0, 0, 0, 0
+        self.strength, self.dexerity, self.magic, self.faith, self.power, self.lifesteal = 0, 10, 0, 0, 0, 0
         self.maxhp, self.hp, self.shield, self.barrior, self.startbarrior, self.level = 0, 150, 0, 0, 1, 1
         self.name = '다크엘프'
         self.isAlive = True
@@ -69,6 +88,8 @@ class Character:
         self.skills = [Skill() for i in range(5)]
         for i in range(5):
             self.skills[i].slot = i
+        self.skills[0].create(0)
+        self.skills[1].create(7)
 
     def draw(self):
         if self.isAlive:
@@ -90,7 +111,8 @@ class Character:
                 self.font.draw(400, 225, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
         else:
             if self.barrior > 0:
-                self.font_size_15.draw(370, 225, '%3.0f / %3.0f + %1.0f' % (self.hp, self.maxhp, self.barrior), (255, 255, 0))
+                self.font_size_15.draw(370, 225, '%3.0f / %3.0f + %1.0f' % (self.hp, self.maxhp, self.barrior),
+                                       (255, 255, 0))
                 self.font_size_15.draw(370, 225, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
             else:
                 self.font_size_18.draw(390, 225, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
@@ -99,16 +121,30 @@ class Character:
 
     def update(self):
         self.maxhp = self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp
-        self.strength = self.armor.strength + self.weapon.strength + self.accessory.strength
+        self.dexerity = self.armor.dexerity + self.weapon.dexerity + self.accessory.dexerity
 
     @staticmethod
     def attack(character, monster):
-        if random.randint(1, 100) <= character.critical_chance:
-            monster.hp -= character.critical_damage * character.strength * character.skills[0].strength
-        else:
-            monster.hp -= random.randint(80, 120) / 100 * character.strength * character.skills[0].strength
-        if monster.hp <= 0:
-            monster.hp = 0
-            monster.isAlive = False
+        for i in range(5):
+            if character.skills[i].isActive:
+                if random.randint(1, 100) <= character.critical_chance:
+                    monster.hp -= character.critical_damage * (character.strength * character.skills[i].strength +
+                                                               character.dexerity * character.skills[i].dexerity +
+                                                               character.faith * character.skills[i].faith +
+                                                               character.magic * character.skills[i].magic)
+                else:
+                    monster.hp -= random.randint(80, 120) / 100 * (character.strength * character.skills[i].strength +
+                                                                   character.dexerity * character.skills[i].dexerity +
+                                                                   character.faith * character.skills[i].faith +
+                                                                   character.magic * character.skills[i].magic)
+                    character.skills[i].isActive = False
+                if monster.hp <= 0:
+                    monster.hp = 0
+                    monster.isAlive = False
 
-
+    def heal(self):
+        for i in range(5):
+            if self.skills[i].isActive:
+                self.hp += self.skills[i].power * self.hp
+                if self.hp > self.maxhp:
+                    self.hp = self.maxhp

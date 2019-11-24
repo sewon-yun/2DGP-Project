@@ -68,9 +68,11 @@ def handle_events():
                     pass
                 elif 5 <= cursor.x <= 275 and 53 <= cursor.y <= 147:
                     room_select_state.x, room_select_state.y = x, y
+                    battle_state.character.skills[num].skill_select = False
                     game_framework.push_state(room_select_state)
                 elif 325 <= cursor.x <= 595 and 53 <= cursor.y <= 147:
                     room_select_state.x, room_select_state.y = x, y
+                    battle_state.character.skills[num].skill_select = False
                     game_framework.push_state(room_select_state)
                     # 스킬 내용 수락
 
