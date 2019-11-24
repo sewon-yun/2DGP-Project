@@ -62,6 +62,25 @@ def create_monster():
     battle_state.monster.isAlive = True
 
 
+def create_boss_monster():
+    # list = [name, hp, barrior, shield, attack_damage, critical_chance, critical_damage, experience]
+    #        [ 0     1     2        3          4               5                 6             7    ]
+    global play_turn
+    level = int(play_turn / 10) + 6
+    pick = 0
+    battle_state.monster.name = game_data.boss_monster_table[pick][0]
+    battle_state.monster.hp = game_data.boss_monster_table[pick][1] * (1.02 ** level)
+    battle_state.monster.maxhp = game_data.boss_monster_table[pick][1] * (1.02 ** level)
+    battle_state.monster.barrior = game_data.boss_monster_table[pick][2] * (1.02 ** level)
+    battle_state.monster.shield = game_data.boss_monster_table[pick][3] * (1.02 ** level)
+    battle_state.monster.attack_damage = game_data.boss_monster_table[pick][4] * (1.02 ** level)
+    battle_state.monster.critical_chance = game_data.boss_monster_table[pick][5] * (1.02 ** level)
+    battle_state.monster.critical_damage = game_data.boss_monster_table[pick][6] * (1.02 ** level)
+    battle_state.monster.experience = game_data.boss_monster_table[pick][7] * (1.02 ** level)
+    battle_state.monster.level = level
+    battle_state.monster.isAlive = True
+
+
 def create_room(n, m):
     global rooms
     for i in range(n, m):
@@ -98,7 +117,6 @@ def create_room(n, m):
         if random.randint(1, 100) <= 30 and rooms[i].element < 4:
             rooms[i].electric_current = rooms[i].element + 1
             rooms[i].element += 1
-
 
 
 def move_room(k):
@@ -176,8 +194,11 @@ def handle_events():
         elif event.type == SDL_MOUSEBUTTONDOWN:
             for room in rooms:
                 if collide(cursor, room) and 0 < room.num < 3:
-                    if room.monster and start:
-                        create_monster()
+                    if room.monster or room.boss and start:
+                        if room.monster:
+                            create_monster()
+                        elif room.boss:
+                            create_boss_monster()
                         isBattle = True
                     elif room.monster and not start:
                         isBattle = True
@@ -191,6 +212,7 @@ def handle_events():
                         battle_state.rooms = rooms
                         if rooms[0].door:
                             battle_state.turn += 1
+                        battle_state.count = 0
                         game_framework.pop_state()
                         game_framework.pop_state()
                     else:

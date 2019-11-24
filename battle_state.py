@@ -26,6 +26,7 @@ cursor = None
 hp_box = None
 rooms = None
 turn = 0
+count = 0
 
 
 def enter():
@@ -66,35 +67,44 @@ def handle_events():
             x, y = event.x, 800 - 1 - event.y
             cursor.x, cursor.y = x, y
         elif turn % 2 == 0:
-            if event.type == SDL_MOUSEBUTTONDOWN and (5 <= x <= 115 and 70 <= y <= 170) \
-                    and character.skills[0].isExist and character.isAlive:
-                character.skills[0].isActive = True
-                if character.skills[0].kinds == 0:
-                    character.attack(character, monster)
-                else:
-                    character.heal()
-                if rooms[0].fair_wind:
-                    character.skills[0].current_cooldown += 1
-                elif rooms[0].swamp:
-                    character.skills[0].current_cooldown += character.skills[0].cooldown + 1
-                else:
-                    character.skills[0].current_cooldown += character.skills[0].cooldown
-                turn += 1
+            for i in range(5):
+                if event.type == SDL_MOUSEBUTTONDOWN and (5 + (i * 120) <= x <= 115 + (i * 120) and 70 <= y <= 170) \
+                        and character.skills[i].isExist and character.isAlive:
+                    if character.skills[i].current_cooldown == 0:
+                        character.skills[i].isActive = True
+                        if character.skills[i].kinds == 0:
+                            character.attack(character, monster)
+                        else:
+                            character.heal()
+                        if rooms[0].fair_wind:
+                            character.skills[i].current_cooldown += 1
+                        elif rooms[0].swamp:
+                            character.skills[i].current_cooldown += character.skills[i].cooldown + 1
+                        else:
+                            character.skills[i].current_cooldown += character.skills[i].cooldown
+                        turn += 1
 
 
 def update():
-    global turn
+    global turn, count
     character.update()
     if turn % 2 == 1:
         if monster.isAlive:
             monster.attack(monster, character)
             turn += 1
-            character.skills[0].current_cooldown -= 1
+            for i in range(5):
+                if character.skills[i].current_cooldown:
+                    character.skills[i].current_cooldown -= 1
         else:
             turn += 1
+            for i in range(5):
+                if character.skills[i].current_cooldown:
+                    character.skills[i].current_cooldown -= 1
             # 화면 전환
             if rooms[0].rest:
                 character.hp = character.maxhp
+            if rooms[0].box:
+                count += 1
             skill_take_state.x, skill_take_state.y = x, y
             game_framework.push_state(skill_take_state)
     pass

@@ -39,3 +39,9 @@ monster_table = {
     ANCIENT: ['고대의 것', 1, 250, 0, 0, 20, 0, 0, 100]
 }
 
+(PHOENIX) = 0
+
+boss_monster_table = {
+    PHOENIX: ['불사조', 500, 0, 0, 40, 10, 5, 300]
+}
+

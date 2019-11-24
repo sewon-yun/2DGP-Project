@@ -17,6 +17,7 @@ class Monster:
             self.image_cyclops = load_image('cyclops.png')
             self.image_budyfucker = load_image('budyfucker.png')
             self.image_ancient = load_image('ancient.png')
+            self.image_phoenix = load_image('phoenix.png')
             self.font = load_font('gothic.ttf', 20)
         self.x, self.y = 425, 600
         self.hp, self.maxhp, self.barrior, self.shield, self.level = 100, 100, 0, 0, 1
@@ -45,6 +46,8 @@ class Monster:
                 self.image_budyfucker.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
             elif self.name == '고대의 것':
                 self.image_ancient.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            elif self.name == '불사조':
+                self.image_phoenix.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
         if (self.hp / self.maxhp) > 0:
             draw_rectangle(50, 610, 250, 640)
             fill_rectangle(50, 610, (self.hp / self.maxhp) * 200 + 50, 640)

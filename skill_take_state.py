@@ -16,23 +16,27 @@ font_size_25 = None
 font_size_30 = None
 max_select_times, select_times = 5, 5
 num = 0
+count = 0
 x, y = 0, 0
 
 
 def enter():
-    global background, cursor, dialog, dialog_yes_or_no, font_size_30, font_size_25, font_size_20, x, y, num
+    global background, cursor, dialog, dialog_yes_or_no, font_size_30, font_size_25, font_size_20, x, y, num, count
     background = Background()
     cursor = Cursor()
     cursor.x, cursor.y = x, y
     num = 0
-    battle_state.character.skills[0].skill_select = True
+    count = battle_state.count
     if image == None:
         dialog = load_image('dialog200x60.png')
         dialog_yes_or_no = load_image('dialog200x70.png')
         font_size_30 = load_font('gothic.ttf', 30)
         font_size_25 = load_font('gothic.ttf', 25)
         font_size_20 = load_font('gothic.ttf', 20)
-
+    if count == 0:
+        game_framework.push_state(room_select_state)
+    else:
+        battle_state.character.skills[0].skill_select = True
 
 def exit():
     global background, cursor, dialog, dialog_yes_or_no, font_size_30, font_size_25, font_size_20
