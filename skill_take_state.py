@@ -59,7 +59,7 @@ def exit():
 
 
 def handle_events():
-    global cursor, select_times, x, y, num, skill
+    global cursor, select_times, x, y, num, skill, count
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -96,14 +96,14 @@ def handle_events():
 
                 elif 325 <= cursor.x <= 595 and 53 <= cursor.y <= 147:
                     room_select_state.x, room_select_state.y = x, y
+                    # 스킬 내용 수락
                     battle_state.character.skills[num].skill_select = False
                     skill.skill_pick = False
-                    skill.skill_slot = num
+                    skill.slot = num
                     battle_state.character.skills[num] = skill
                     game_framework.push_state(room_select_state)
-                    # 스킬 내용 수락
-
 def draw():
+    global skill
     clear_canvas()
     background.draw()
     dialog.clip_draw(0, 0, 200, 60, 150, 500, 250, 75)
@@ -116,6 +116,8 @@ def draw():
     font_size_30.draw(115, 100, '무시', (255, 255, 255))
     font_size_30.draw(435, 100, '수락', (255, 255, 255))
     arrow.clip_draw(0, 0, 100, 70, 300, 350, 100, 70)
+    if battle_state.character.skills[num].name == skill.name:
+        font_size_20.draw(240, 300, 'Skill Level Up +', (255, 255, 0))
     battle_state.character.skills[num].draw()
     skill.draw()
     cursor.draw()

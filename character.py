@@ -92,7 +92,7 @@ class Skill:
                         self.font.draw(self.slot * 120 + 10, 55, '%s' % self.name, (255, 255, 255))
                     elif self.name == '회복':
                         self.image_skill_8.clip_draw(80, 213, 60, 50, 66 + self.slot * 120, 120 - 3, 110, 100)
-                        self.font.draw(self.slot * 120 + 35, 55, '%s' % self.name, (255, 255, 255))
+                        self.font.draw(self.slot * 120 + 40, 55, '%s' % self.name, (255, 255, 255))
                     elif self.name == '완전 회복' or self.name == '상급 회복':
                         self.image_skill_8.clip_draw(80, 213, 60, 50, 66 + self.slot * 120, 120 - 3, 110, 100)
                         self.font.draw(self.slot * 120 + 13, 55, '%s' % self.name, (255, 255, 255))
@@ -101,10 +101,10 @@ class Skill:
                         self.font.draw(self.slot * 120 + 25, 55, '%s' % self.name, (255, 255, 255))
                     elif self.name == '사격':
                         self.image_skill_7.clip_draw(335, 40, 60, 52, 61 + self.slot * 120, 120 - 3, 100, 100)
-                        self.font.draw(self.slot * 120 + 35, 55, '%s' % self.name, (255, 255, 255))
+                        self.font.draw(self.slot * 120 + 40, 55, '%s' % self.name, (255, 255, 255))
                     elif self.name == '암습':
                         self.image_skill_7.clip_draw(270, 213, 60, 52, 64 + self.slot * 120, 120 - 3, 100, 100)
-                        self.font.draw(self.slot * 120 + 35, 55, '%s' % self.name, (255, 255, 255))
+                        self.font.draw(self.slot * 120 + 40, 55, '%s' % self.name, (255, 255, 255))
                     elif self.name == '응급 처치' or '상처 치료':
                         self.image_skill_8.clip_draw(267, 300, 60, 50, 65 + self.slot * 120, 120 - 2, 110, 100)
                         self.font.draw(self.slot * 120 + 15, 55, '%s' % self.name, (255, 255, 255))

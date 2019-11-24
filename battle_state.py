@@ -27,7 +27,8 @@ hp_box = None
 rooms = None
 turn = 0
 count = 0
-
+floor = 1
+floor_prograss = 0
 
 def enter():
     global background, character, monster, cursor, hp_box, turn, rooms
@@ -86,7 +87,7 @@ def handle_events():
 
 
 def update():
-    global turn, count
+    global turn, count, floor, floor_prograss
     character.update()
     if turn % 2 == 1:
         if monster.isAlive:
@@ -106,6 +107,9 @@ def update():
                 character.hp = character.maxhp
             if rooms[0].box:
                 count += 1
+            if rooms[0].boss:
+                floor += 1
+                floor_prograss = 0
             skill_take_state.x, skill_take_state.y = x, y
             game_framework.push_state(skill_take_state)
     pass

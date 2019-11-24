@@ -14,8 +14,8 @@ name = "RoomSelectState"
 save_num = 0
 cursor = None
 font = None
+font_size_30 = None
 play_turn = 0
-floor_prograss = 0
 start = False
 rooms = []
 background = None
@@ -89,7 +89,7 @@ def create_room(n, m):
         if random.randint(1, 100) <= 10:
             rooms[i].door = 1
         if random.randint(1, 100) <= 70:
-            if random.randint(1, 100) < play_turn:
+            if random.randint(1, 40) < battle_state.floor_prograss:
                 rooms[i].boss = 1
             else:
                 rooms[i].monster = 1
@@ -157,13 +157,14 @@ def move_room_data(a, b):
 
 def enter():
     hide_cursor()
-    global background, cursor, x, y, isCollide, isBattle, rooms, font, start, play_turn
+    global background, cursor, x, y, isCollide, isBattle, rooms, font, start, play_turn, font_size_30
     isCollide = False
     isBattle = False
     play_turn = battle_state.turn
     background = Background()
     cursor = Cursor()
     font = load_font('gothic.ttf', 20)
+    font_size_30 = load_font('gothic.ttf', 30)
     cursor.x, cursor.y = x, y
     rooms = [Room() for i in range(7)]
     for i in range(0, 7):
@@ -205,6 +206,7 @@ def handle_events():
                     isCollide = True
                     save_num = room.num
             if isCollide:
+                battle_state.floor_prograss += 1
                 if isBattle:
                     if start:
                         battle_state.cursor.x, battle_state.cursor.y = x, y
@@ -238,6 +240,7 @@ def draw():
         for i in range(4):
             fill_rectangle_rgb(10 + i * 150, 510, 140 + i * 150, 640, 0, 0, 0)
             font.draw(15 + i * 150, 580, '보이지 않는다', (255, 255, 255))
+    font_size_30.draw(275, 750, '%1.0f층' % battle_state.floor, (255, 255, 255))
     cursor.draw()
     update_canvas()
 

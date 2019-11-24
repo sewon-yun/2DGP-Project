@@ -5,7 +5,7 @@ import room_select_state
 # list = [ cooldown, name, strength, dexerity, magic, faith, power, critical_chance, accuracy, kinds]
 #        [     1       2      3         4        5      6      7           8            9    ,  10  ]
 skill_table = {
-    SHADOW_SHOT: [1, '그림자 사격', 0, 2, 0, 0, 0, False, 0],
+    SHADOW_SHOT: [2, '그림자 사격', 0, 2, 0, 0, 0, False, 0],
     RANGED_SHOT: [0, '사격', 0, 1, 0, 0, 0, False, 0],
     AIMING: [1, '정조준', 0, 1, 0, 0, 0, True, 0],
     BACKSTAB: [4, '암습', 0, 3.6, 0, 0, 0, False, 0],
