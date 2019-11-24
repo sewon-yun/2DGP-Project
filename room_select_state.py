@@ -89,7 +89,7 @@ def create_room(n, m):
         if random.randint(1, 100) <= 10:
             rooms[i].door = 1
         if random.randint(1, 100) <= 70:
-            if random.randint(1, 40) < battle_state.floor_prograss:
+            if random.randint(1, 10) < battle_state.floor_prograss:
                 rooms[i].boss = 1
             else:
                 rooms[i].monster = 1

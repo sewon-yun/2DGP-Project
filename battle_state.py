@@ -110,6 +110,9 @@ def update():
             if rooms[0].boss:
                 floor += 1
                 floor_prograss = 0
+                if floor == 6:
+                    print('win')
+                    game_framework.quit()
             skill_take_state.x, skill_take_state.y = x, y
             game_framework.push_state(skill_take_state)
     pass

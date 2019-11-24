@@ -97,10 +97,14 @@ def handle_events():
                 elif 325 <= cursor.x <= 595 and 53 <= cursor.y <= 147:
                     room_select_state.x, room_select_state.y = x, y
                     # 스킬 내용 수락
-                    battle_state.character.skills[num].skill_select = False
-                    skill.skill_pick = False
-                    skill.slot = num
-                    battle_state.character.skills[num] = skill
+                    if battle_state.character.skills[num].name == skill.name:
+                        battle_state.character.skills[num].level += 1
+                        battle_state.character.skills[num].skill_select = False
+                    else:
+                        battle_state.character.skills[num].skill_select = False
+                        skill.skill_pick = False
+                        skill.slot = num
+                        battle_state.character.skills[num] = skill
                     game_framework.push_state(room_select_state)
 def draw():
     global skill
