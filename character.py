@@ -8,8 +8,7 @@ count = 0
 
 class Equipment:
     def __init__(self):
-        (self.maxhp, self.avoidability, self.accuracy,
-         self.strength, self.dexerity, self.magic, self.faith, self.power) = 100, 0, 0, 0, 30, 0, 0, 0
+        self.maxhp, self.strength, self.dexerity, self.magic, self.faith, self.power = 100, 0, 30, 0, 0, 0
         self.shield, self.critical_chance, self.penetration, self.critical_damage, self.barrior = 0, 0, 0, 0, 0
         self.lifesteal = 0
 
@@ -35,7 +34,6 @@ class Skill:
         self.isActive = False
         self.strength, self.dexerity, self.magic, self.faith, self.power = 0, 2, 0, 0, 0
         self.kinds = 0
-        self.accuracy = False
         self.skill_select = False
         self.skill_pick = False
         self.level = 0
@@ -178,8 +176,7 @@ class Skill:
         self.magic = game_data.skill_table[pick][4]
         self.faith = game_data.skill_table[pick][5]
         self.power = game_data.skill_table[pick][6]
-        self.accuracy = game_data.skill_table[pick][7]
-        self.kinds = game_data.skill_table[pick][8]
+        self.kinds = game_data.skill_table[pick][7]
         self.isExist = True
 
 
@@ -191,7 +188,7 @@ class Character:
             self.font_size_15 = load_font('gothic.ttf', 15)
             self.font_size_18 = load_font('gothic.ttf', 18)
         self.x, self.y, self.experience = 150, 200, 0
-        self.avoidability, self.accuracy, self.critical_chance, self.penetration, self.critical_damage = 0, 0, 10, 0, 2
+        self.critical_chance, self.penetration, self.critical_damage = 10, 0, 2
         self.strength, self.dexerity, self.magic, self.faith, self.power, self.lifesteal = 0, 10, 0, 0, 0, 0
         self.maxhp, self.hp, self.shield, self.barrior, self.startbarrior, self.level = 0, 300, 0, 0, 1, 1
         self.name = '다크엘프'
@@ -260,13 +257,15 @@ class Character:
                     monster.hp -= character.critical_damage * (character.strength * character.skills[i].strength +
                                                                character.dexerity * character.skills[i].dexerity +
                                                                character.faith * character.skills[i].faith +
-                                                               character.magic * character.skills[i].magic) * (1.1 ** character.skills[i].level)
+                                                               character.magic * character.skills[i].magic) * \
+                                                              (1.1 ** character.skills[i].level)
 
                 else:
                     monster.hp -= random.randint(80, 120) / 100 * (character.strength * character.skills[i].strength +
                                                                    character.dexerity * character.skills[i].dexerity +
                                                                    character.faith * character.skills[i].faith +
-                                                                   character.magic * character.skills[i].magic) * (1.1 ** character.skills[i].level)
+                                                                   character.magic * character.skills[i].magic) * \
+                                                              (1.1 ** character.skills[i].level)
                 if monster.hp <= 0:
                     monster.hp = 0
                     monster.isAlive = False

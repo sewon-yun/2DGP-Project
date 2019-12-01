@@ -2,19 +2,19 @@ from mypico2d import *
 import room_select_state
 
 (SHADOW_SHOT, RANGED_SHOT, AIMING, BACKSTAB, BACKSTEP, CURE, FIRSTAID, HEALING, HIGH_HEALING, FULL_HEALING) = range(10)
-# list = [ cooldown, name, strength, dexerity, magic, faith, power, critical_chance, accuracy, kinds]
-#        [     1       2      3         4        5      6      7           8            9    ,  10  ]
+# list = [ cooldown, name, strength, dexerity, magic, faith, power, critical_chance, kinds]
+#        [     1       2      3         4        5      6      7           8           9  ]
 skill_table = {
-    SHADOW_SHOT: [2, '그림자 사격', 0, 2, 0, 0, 0, False, 0],
-    RANGED_SHOT: [0, '사격', 0, 1, 0, 0, 0, False, 0],
-    AIMING: [1, '정조준', 0, 1, 0, 0, 0, True, 0],
-    BACKSTAB: [4, '암습', 0, 3.6, 0, 0, 0, False, 0],
-    BACKSTEP: [1, '백스텝', 0, 0, 0, 0, 0.65, False, 1],
-    CURE: [0, '상처 치료', 0, 0, 0, 0, 0.3, False, 3],
-    FIRSTAID: [0, '응급 처치', 0, 0, 0, 0, 0.1, False, 3],
-    HEALING: [2, '회복', 0, 0, 0, 0, 0.25, False, 3],
-    HIGH_HEALING: [4, '상급 회복', 0, 0, 0, 0, 0.5, False, 3],
-    FULL_HEALING: [8, '완전 회복', 0, 0, 0, 0, 1, False, 3]
+    SHADOW_SHOT: [2, '그림자 사격', 0, 2, 0, 0, 0, 0],
+    RANGED_SHOT: [0, '사격', 0, 1, 0, 0, 0, 0],
+    AIMING: [1, '정조준', 0, 1, 0, 0, 0, 0],
+    BACKSTAB: [4, '암습', 0, 3.6, 0, 0, 0, 0],
+    BACKSTEP: [1, '백스텝', 0, 0, 0, 0, 0.65, 1],
+    CURE: [0, '상처 치료', 0, 0, 0, 0, 0.3, 3],
+    FIRSTAID: [0, '응급 처치', 0, 0, 0, 0, 0.1, 3],
+    HEALING: [2, '회복', 0, 0, 0, 0, 0.25, 3],
+    HIGH_HEALING: [4, '상급 회복', 0, 0, 0, 0, 0.5, 3],
+    FULL_HEALING: [8, '완전 회복', 0, 0, 0, 0, 1, 3]
 }
 
 # list = [name, hp, barrior, shield, attack_damage, critical_chance, critical_damage, experience]
