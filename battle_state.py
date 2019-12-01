@@ -29,7 +29,7 @@ turn = 0
 count = 0
 floor = 1
 floor_prograss = 0
-delay_time = 0
+attack_time = 0.0
 
 def enter():
     global background, character, monster, cursor, hp_box, turn, rooms
@@ -88,13 +88,16 @@ def handle_events():
 
 
 def update():
-    global turn, count, floor, floor_prograss
+    global turn, count, floor, floor_prograss, attack_time
     character.update()
-    print(turn)
     if turn % 2 == 1:
         if monster.isAlive:
-            monster.attack(monster, character)
-            turn += 1
+            if attack_time >= 1.0:
+                attack_time = 0.0
+                monster.attack(monster, character)
+                turn += 1
+            else:
+                attack_time += game_framework.frame_time
             for i in range(5):
                 if character.skills[i].current_cooldown:
                     character.skills[i].current_cooldown -= 1
