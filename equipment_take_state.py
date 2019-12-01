@@ -3,17 +3,16 @@ from mypico2d import *
 import battle_state
 import room_select_state
 import random
-from character import Skill
+from character import Equipment
 from background import Background
 from cursor import Cursor
 
-
-name = "SkillTakeState"
+name = "EquipmentTakeState"
 background = None
 image = None
 cursor = None
 dialog = None
-skill = None
+equipment = None
 arrow = None
 dialog_yes_or_no = None
 font_size_20 = None
@@ -27,15 +26,10 @@ x, y = 0, 0
 
 def enter():
     global background, cursor, dialog, dialog_yes_or_no, font_size_30, font_size_25, font_size_20, \
-        x, y, num, count, select_times, skill, arrow
+        x, y, num, count, select_times, arrow, equipment
     background = Background()
     cursor = Cursor()
-    skill = Skill()
-    skill.skill_pick = True
-    pick = random.randint(0, 9)
-    if pick == 4:
-        pick += 1
-    skill.create(pick)
+    equipment = Equipment
     cursor.x, cursor.y = x, y
     select_times = 5
     num = 0
@@ -47,18 +41,15 @@ def enter():
         font_size_25 = load_font('gothic.ttf', 25)
         font_size_20 = load_font('gothic.ttf', 20)
         arrow = load_image('arrow.png')
-    if count == 0:
-        game_framework.push_state(room_select_state)
-    else:
-        battle_state.character.skills[0].skill_select = True
+
 
 def exit():
-    global background, cursor, dialog, dialog_yes_or_no, font_size_30, font_size_25, font_size_20, skill
-    del background, cursor, dialog, dialog_yes_or_no, font_size_30, font_size_25, font_size_20, skill
+    global background, cursor, dialog, dialog_yes_or_no, font_size_30, font_size_25, font_size_20
+    del background, cursor, dialog, dialog_yes_or_no, font_size_30, font_size_25, font_size_20
 
 
 def handle_events():
-    global cursor, select_times, x, y, num, skill, count
+    global cursor, select_times, x, y, num, count
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -76,37 +67,22 @@ def handle_events():
                 if 325 <= cursor.x <= 575 and 463 <= cursor.y <= 537:
                     if select_times > 0:
                         select_times -= 1
-                        # 스킬 다시 뽑기
+                        # 장비 다시 뽑기
                         pick = random.randint(0, 9)
                         if pick == 4:
                             pick += 1
-                        skill.create(pick)
-                elif 25 <= cursor.x <= 275 and 463 <= cursor.y <= 537:
-                    battle_state.character.skills[num].skill_select = False
-                    num += 1
-                    if num == 5:
-                        num = 0
-                    battle_state.character.skills[num].skill_select = True
-
                 elif 5 <= cursor.x <= 275 and 53 <= cursor.y <= 147:
+                    # 무시
                     room_select_state.x, room_select_state.y = x, y
-                    battle_state.character.skills[num].skill_select = False
                     game_framework.push_state(room_select_state)
 
                 elif 325 <= cursor.x <= 595 and 53 <= cursor.y <= 147:
                     room_select_state.x, room_select_state.y = x, y
-                    # 스킬 내용 수락
-                    if battle_state.character.skills[num].name == skill.name:
-                        battle_state.character.skills[num].level += 1
-                        battle_state.character.skills[num].skill_select = False
-                    else:
-                        battle_state.character.skills[num].skill_select = False
-                        skill.skill_pick = False
-                        skill.slot = num
-                        battle_state.character.skills[num] = skill
+                    # 장비 바꾸기 수락
                     game_framework.push_state(room_select_state)
+
+
 def draw():
-    global skill
     clear_canvas()
     background.draw()
     dialog.clip_draw(0, 0, 200, 60, 150, 500, 250, 75)
@@ -119,10 +95,6 @@ def draw():
     font_size_30.draw(115, 100, '무시', (255, 255, 255))
     font_size_30.draw(435, 100, '수락', (255, 255, 255))
     arrow.clip_draw(0, 0, 100, 70, 300, 350, 100, 70)
-    if battle_state.character.skills[num].name == skill.name:
-        font_size_20.draw(240, 300, 'Skill Level Up +', (255, 255, 0))
-    battle_state.character.skills[num].draw()
-    skill.draw()
     cursor.draw()
     update_canvas()
 
