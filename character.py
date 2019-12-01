@@ -236,7 +236,7 @@ class Character:
     def update(self):
         self.maxhp = self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp
         self.dexerity = self.armor.dexerity + self.weapon.dexerity + self.accessory.dexerity
-
+        self.strength = self.armor.strength + self.weapon.strength + self.accessory.strength
     def level_up(self, n):
         global count
         if self.experience >= game_data.experence_table[self.level]:

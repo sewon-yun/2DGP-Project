@@ -29,6 +29,7 @@ turn = 0
 count = 0
 floor = 1
 floor_prograss = 0
+delay_time = 0
 
 def enter():
     global background, character, monster, cursor, hp_box, turn, rooms
@@ -89,6 +90,7 @@ def handle_events():
 def update():
     global turn, count, floor, floor_prograss
     character.update()
+    print(turn)
     if turn % 2 == 1:
         if monster.isAlive:
             monster.attack(monster, character)
@@ -127,3 +129,5 @@ def draw():
     monster.draw()
     cursor.draw()
     update_canvas()
+
+
