@@ -7,6 +7,7 @@ from mypico2d import *
 import game_framework
 import room_select_state
 import skill_take_state
+import victory_state
 
 from background import Background
 from character import Character
@@ -29,7 +30,7 @@ turn = 0
 count = 0
 floor = 1
 floor_prograss = 0
-attack_time = 0.0
+delay_time = 0.0
 
 def enter():
     global background, character, monster, cursor, hp_box, turn, rooms
@@ -88,39 +89,43 @@ def handle_events():
 
 
 def update():
-    global turn, count, floor, floor_prograss, attack_time
+    global turn, count, floor, floor_prograss, delay_time
     character.update()
     if turn % 2 == 1:
         if monster.isAlive:
-            if attack_time >= 1.0:
-                attack_time = 0.0
+            if delay_time >= 1.0:
+                delay_time = 0.0
                 monster.attack(monster, character)
                 turn += 1
+                for i in range(5):
+                    if character.skills[i].current_cooldown:
+                        character.skills[i].current_cooldown -= 1
             else:
-                attack_time += game_framework.frame_time
-            for i in range(5):
-                if character.skills[i].current_cooldown:
-                    character.skills[i].current_cooldown -= 1
+                delay_time += game_framework.frame_time
         else:
-            turn += 1
-            for i in range(5):
-                if character.skills[i].current_cooldown:
-                    character.skills[i].current_cooldown -= 1
-            # 화면 전환
-            character.level_up(0)
-            if rooms[0].rest:
-                character.hp = character.maxhp
-            if rooms[0].box:
-                count += 1
-            if rooms[0].boss:
-                floor += 1
-                floor_prograss = 0
-                if floor == 6:
-                    print('win')
-                    game_framework.quit()
-            skill_take_state.x, skill_take_state.y = x, y
-            game_framework.push_state(skill_take_state)
-    pass
+            if delay_time >= 1.0:
+                delay_time = 0.0
+                turn += 1
+                for i in range(5):
+                    if character.skills[i].current_cooldown:
+                        character.skills[i].current_cooldown -= 1
+                # 화면 전환
+                if rooms[0].rest:
+                    character.hp = character.maxhp
+                if rooms[0].box:
+                    count += 1
+                if rooms[0].boss:
+                    floor += 1
+                    floor_prograss = 0
+                    if floor == 6:
+                        game_framework.change_state(victory_state)
+                        game_framework.quit()
+                skill_take_state.x, skill_take_state.y = x, y
+                game_framework.push_state(skill_take_state)
+            else:
+                delay_time += game_framework.frame_time
+                if delay_time == 0.5:
+                    character.level_up(0)
 
 
 def draw():
