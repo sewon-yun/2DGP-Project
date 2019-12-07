@@ -85,6 +85,7 @@ def handle_events():
                         character.skills[i].isActive = True
                         if character.skills[i].kinds == 0:
                             character.attack(character, monster)
+                            character.level_up(0)
                         else:
                             character.heal()
                         if rooms[0].fair_wind:
@@ -113,7 +114,7 @@ def update():
             else:
                 delay_time += game_framework.frame_time
         else:
-            if delay_time >= 1.0:
+            if delay_time >= 2.0:
                 delay_time = 0.0
                 turn += 1
                 for i in range(5):
@@ -134,8 +135,6 @@ def update():
                 game_framework.push_state(skill_take_state)
             else:
                 delay_time += game_framework.frame_time
-                if delay_time == 0.5:
-                    character.level_up(0)
 
 
 def draw():
