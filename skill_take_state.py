@@ -37,7 +37,7 @@ def enter():
         pick += 1
     skill.create(pick)
     cursor.x, cursor.y = x, y
-    select_times = 5
+    select_times = 3
     num = 0
     count = battle_state.count
     if image == None:

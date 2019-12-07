@@ -201,7 +201,7 @@ class Character:
         self.x, self.y, self.experience = 150, 200, 0
         self.critical_chance, self.penetration, self.critical_damage = 10, 0, 2
         self.strength, self.dexerity, self.magic, self.faith, self.power, self.lifesteal = 0, 10, 0, 0, 0, 0
-        self.maxhp, self.hp, self.shield, self.barrior, self.startbarrior, self.level = 0, 150, 0, 0, 1, 1
+        self.maxhp, self.hp, self.shield, self.barrior, self.startbarrior, self.level = 0, 165, 0, 0, 1, 1
         self.name = '다크엘프'
         self.isAlive = True
         self.weapon = Equipment()
@@ -245,9 +245,9 @@ class Character:
             self.skills[i].draw()
 
     def update(self):
-        self.maxhp = self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp
-        self.dexerity = self.armor.dexerity + self.weapon.dexerity + self.accessory.dexerity
-        self.strength = self.armor.strength + self.weapon.strength + self.accessory.strength
+        self.maxhp = (self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp) * 1.1 ** self.level
+        self.dexerity = (self.armor.dexerity + self.weapon.dexerity + self.accessory.dexerity) * 1.1 ** self.level
+        self.strength = (self.armor.strength + self.weapon.strength + self.accessory.strength) * 1.1 ** self.level
 
     def level_up(self, n):
         global count
