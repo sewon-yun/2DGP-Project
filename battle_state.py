@@ -129,10 +129,11 @@ def update():
                     floor += 1
                     bgm.repeat_play()
                     floor_prograss = 0
-                    if floor == 6:
-                        game_framework.change_state(victory_state)
-                skill_take_state.x, skill_take_state.y = x, y
-                game_framework.push_state(skill_take_state)
+                if floor == 6:
+                    game_framework.change_state(victory_state)
+                else:
+                    skill_take_state.x, skill_take_state.y = x, y
+                    game_framework.push_state(skill_take_state)
             else:
                 delay_time += game_framework.frame_time
 

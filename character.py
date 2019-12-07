@@ -285,6 +285,7 @@ class Character:
                 if monster.hp <= 0:
                     monster.hp = 0
                     monster.isAlive = False
+                    monster.death_sound.play(1)
                     character.experience += monster.experience
                 character.skills[i].isActive = False
 

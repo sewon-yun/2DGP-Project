@@ -19,6 +19,8 @@ class Monster:
             self.image_ancient = load_image('ancient.png')
             self.image_phoenix = load_image('phoenix.png')
             self.font = load_font('gothic.ttf', 20)
+            self.death_sound = load_wav('monster-growl1.wav')
+            self.death_sound.set_volume(128)
         self.x, self.y = 425, 600
         self.hp, self.maxhp, self.barrior, self.shield, self.level = 100, 100, 0, 0, 1
         self.name = '래빗'
