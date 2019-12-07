@@ -3,10 +3,10 @@ from mypico2d import *
 
 name = "GameOverState"
 bgm = None
-game_over = None
+image = None
 
 def enter():
-    global bgm, game_over
+    global bgm, image
     game_over = load_image('game_over.png')
     bgm = load_music('lose_music.mp3')
     bgm.set_volume(64)
@@ -15,7 +15,7 @@ def enter():
 
 
 def exit():
-    global bgm, game_over
+    global bgm, image
     del bgm, game_over
 
 
@@ -30,7 +30,7 @@ def handle_events():
 
 def draw():
     clear_canvas()
-    game_over.draw(300, 400)
+    image.draw(300, 400)
     update_canvas()
 
 
