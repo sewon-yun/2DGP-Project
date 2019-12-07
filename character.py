@@ -6,6 +6,8 @@ import battle_state
 image = None
 count = 0
 
+KNIFE, GUN, BOW, HEAL = range(4)
+
 class Equipment:
     def __init__(self):
         self.maxhp, self.strength, self.dexerity, self.magic, self.faith, self.power = 50, 0, 30, 0, 0, 0
@@ -25,6 +27,8 @@ class Skill:
             self.font = load_font('gothic.ttf', 20)
             self.font_size_25 = load_font('gothic.ttf', 25)
             self.cooldown_font = load_font('gothic.ttf', 40)
+            self.knife_sound = load_wav('sword-slash3.wav')
+            self.knife_sound.set_volume(32)
         self.slot = 0
         self.current_cooldown = 0
         self.cooldown = 1
@@ -36,6 +40,7 @@ class Skill:
         self.skill_select = False
         self.skill_pick = False
         self.level = 0
+        self.sound = 0
 
     def draw(self):
         if self.skill_pick:
@@ -176,6 +181,7 @@ class Skill:
         self.faith = game_data.skill_table[pick][5]
         self.power = game_data.skill_table[pick][6]
         self.kinds = game_data.skill_table[pick][7]
+        self.sound = game_data.skill_table[pick][8]
         self.isExist = True
 
 
@@ -252,6 +258,8 @@ class Character:
     def attack(character, monster):
         for i in range(5):
             if character.skills[i].isActive:
+                if character.skills[i].sound == 0:
+                    character.skills[i].knife_sound.play(1)
                 if random.randint(1, 100) <= character.critical_chance:
                     monster.hp -= character.critical_damage * (character.strength * character.skills[i].strength +
                                                                character.dexerity * character.skills[i].dexerity +
