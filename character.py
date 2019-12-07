@@ -8,7 +8,7 @@ count = 0
 
 class Equipment:
     def __init__(self):
-        self.maxhp, self.strength, self.dexerity, self.magic, self.faith, self.power = 100, 0, 30, 0, 0, 0
+        self.maxhp, self.strength, self.dexerity, self.magic, self.faith, self.power = 50, 0, 30, 0, 0, 0
         self.shield, self.critical_chance, self.critical_damage, self.barrior = 0, 0, 0, 0
 
     def draw(self):
@@ -189,7 +189,7 @@ class Character:
         self.x, self.y, self.experience = 150, 200, 0
         self.critical_chance, self.penetration, self.critical_damage = 10, 0, 2
         self.strength, self.dexerity, self.magic, self.faith, self.power, self.lifesteal = 0, 10, 0, 0, 0, 0
-        self.maxhp, self.hp, self.shield, self.barrior, self.startbarrior, self.level = 0, 300, 0, 0, 1, 1
+        self.maxhp, self.hp, self.shield, self.barrior, self.startbarrior, self.level = 0, 150, 0, 0, 1, 1
         self.name = '다크엘프'
         self.isAlive = True
         self.weapon = Equipment()

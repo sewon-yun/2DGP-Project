@@ -8,6 +8,7 @@ import game_framework
 import room_select_state
 import skill_take_state
 import victory_state
+import game_over_state
 
 from background import Background
 from character import Character
@@ -26,6 +27,8 @@ monster = None
 cursor = None
 hp_box = None
 rooms = None
+bgm = None
+boss_bgm = None
 turn = 0
 count = 0
 floor = 1
@@ -33,7 +36,7 @@ floor_prograss = 0
 delay_time = 0.0
 
 def enter():
-    global background, character, monster, cursor, hp_box, turn, rooms
+    global background, character, monster, cursor, hp_box, turn, rooms, bgm, boss_bgm
     cursor = Cursor()
     rooms = [Room() for i in range(7)]
     if hp_box == None:
@@ -41,13 +44,18 @@ def enter():
     background = Background()
     character = Character()
     monster = Monster()
+    bgm = load_music('main_music.mp3')
+    bgm.set_volume(64)
+    bgm.repeat_play()
+    boss_bgm = load_music('boss_music.mp3')
+    boss_bgm.set_volume(64)
     turn = 0
     game_framework.push_state(room_select_state)
 
 
 def exit():
-    global background, cursor, character, monster, hp_box
-    del background, cursor, character, monster, hp_box
+    global background, cursor, character, monster, hp_box, bgm
+    del background, cursor, character, monster, hp_box, bgm
 
 
 def pause():
@@ -89,7 +97,7 @@ def handle_events():
 
 
 def update():
-    global turn, count, floor, floor_prograss, delay_time
+    global turn, count, floor, floor_prograss, delay_time, bgm
     character.update()
     if turn % 2 == 1:
         if monster.isAlive:
@@ -100,6 +108,8 @@ def update():
                 for i in range(5):
                     if character.skills[i].current_cooldown:
                         character.skills[i].current_cooldown -= 1
+                if character.hp <= 0:
+                    game_framework.change_state(game_over_state)
             else:
                 delay_time += game_framework.frame_time
         else:
@@ -116,10 +126,10 @@ def update():
                     count += 1
                 if rooms[0].boss:
                     floor += 1
+                    bgm.repeat_play()
                     floor_prograss = 0
                     if floor == 6:
                         game_framework.change_state(victory_state)
-                        game_framework.quit()
                 skill_take_state.x, skill_take_state.y = x, y
                 game_framework.push_state(skill_take_state)
             else:

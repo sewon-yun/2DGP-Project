@@ -79,6 +79,8 @@ def create_boss_monster():
     battle_state.monster.experience = game_data.boss_monster_table[pick][7] * (1.02 ** level)
     battle_state.monster.level = level
     battle_state.monster.isAlive = True
+    battle_state.bgm.stop()
+    battle_state.boss_bgm.repeat_play()
 
 
 def create_room(n, m):
