@@ -15,8 +15,8 @@ background = None
 
 def enter():
     global bgm, image, cursor, background
-    image = load_image('victory.png')
-    bgm = load_music('victory_music.mp3')
+    image = load_image('image\\victory.png')
+    bgm = load_music('sound\\victory_music.mp3')
     background = Background()
     cursor = Cursor()
     bgm.set_volume(64)

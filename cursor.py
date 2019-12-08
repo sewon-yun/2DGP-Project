@@ -7,7 +7,7 @@ class Cursor:
     image = None
     def __init__(self):
         if Cursor.image == None:
-            self.image = load_image('game_cursor.png')
+            self.image = load_image('image\\game_cursor.png')
         self.x, self.y = 0, 0
 
     def get_bb(self):

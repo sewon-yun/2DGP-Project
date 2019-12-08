@@ -8,8 +8,8 @@ game_over = None
 
 def enter():
     global bgm, image
-    image = load_image('game_over.png')
-    bgm = load_music('lose_music.mp3')
+    image = load_image('image\\game_over.png')
+    bgm = load_music('sound\\lose_music.mp3')
     bgm.set_volume(64)
     bgm.repeat_play()
     pass

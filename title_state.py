@@ -11,8 +11,8 @@ cursor = None
 
 def enter():
     global bgm, image, cursor
-    image = load_image('title_state.png')
-    bgm = load_music('title_music.mp3')
+    image = load_image("image\\title_state.png")
+    bgm = load_music('sound\\title_music.mp3')
     cursor = Cursor()
     bgm.set_volume(64)
     bgm.repeat_play()

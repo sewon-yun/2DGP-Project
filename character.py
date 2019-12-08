@@ -20,17 +20,17 @@ class Equipment:
 class Skill:
     def __init__(self):
         if setting == None:
-            self.image_skill_1 = load_image('skill_1.png')
-            self.image_skill_7 = load_image('skill_7.png')
-            self.image_skill_8 = load_image('skill_8.png')
-            self.image_skill_9 = load_image('skill_9.png')
-            self.font = load_font('gothic.ttf', 20)
-            self.font_size_25 = load_font('gothic.ttf', 25)
-            self.cooldown_font = load_font('gothic.ttf', 40)
-            self.knife_sound = load_wav('sword-slash3.wav')
-            self.gun_sound = load_wav('dart1.wav')
-            self.bow_sound = load_wav('whip-gesture1.wav')
-            self.heal_sound = load_wav('magic-cure1.wav')
+            self.image_skill_1 = load_image('skill\\skill_1.png')
+            self.image_skill_7 = load_image('skill\\skill_7.png')
+            self.image_skill_8 = load_image('skill\\skill_8.png')
+            self.image_skill_9 = load_image('skill\\skill_9.png')
+            self.font = load_font('font\\gothic.ttf', 20)
+            self.font_size_25 = load_font('font\\gothic.ttf', 25)
+            self.cooldown_font = load_font('font\\gothic.ttf', 40)
+            self.knife_sound = load_wav('sound\\sword-slash3.wav')
+            self.gun_sound = load_wav('sound\\dart1.wav')
+            self.bow_sound = load_wav('sound\\whip-gesture1.wav')
+            self.heal_sound = load_wav('sound\\magic-cure1.wav')
             self.knife_sound.set_volume(32)
             self.gun_sound.set_volume(32)
             self.bow_sound.set_volume(128)
@@ -194,10 +194,10 @@ class Skill:
 class Character:
     def __init__(self):
         if setting == None:
-            self.image_dark_elf = load_image('darkelf.png')
-            self.font = load_font('gothic.ttf', 20)
-            self.font_size_15 = load_font('gothic.ttf', 15)
-            self.font_size_18 = load_font('gothic.ttf', 18)
+            self.image_dark_elf = load_image('character\\darkelf.png')
+            self.font = load_font('font\\gothic.ttf', 20)
+            self.font_size_15 = load_font('font\\gothic.ttf', 15)
+            self.font_size_18 = load_font('font\\gothic.ttf', 18)
         self.x, self.y, self.experience = 150, 200, 0
         self.critical_chance, self.penetration, self.critical_damage = 10, 0, 2
         self.strength, self.dexerity, self.magic, self.faith, self.power, self.lifesteal = 0, 10, 0, 0, 0, 0

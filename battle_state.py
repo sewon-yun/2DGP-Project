@@ -40,14 +40,14 @@ def enter():
     cursor = Cursor()
     rooms = [Room() for i in range(7)]
     if hp_box == None:
-        hp_box = load_image('hp_box.png')
+        hp_box = load_image('image\\hp_box.png')
     background = Background()
     character = Character()
     monster = Monster()
-    bgm = load_music('main_music.mp3')
+    bgm = load_music('sound\\main_music.mp3')
     bgm.set_volume(64)
     bgm.repeat_play()
-    boss_bgm = load_music('boss_music.mp3')
+    boss_bgm = load_music('sound\\boss_music.mp3')
     boss_bgm.set_volume(64)
     turn = 0
     game_framework.push_state(room_select_state)

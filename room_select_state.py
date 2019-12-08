@@ -165,8 +165,8 @@ def enter():
     play_turn = battle_state.turn
     background = Background()
     cursor = Cursor()
-    font = load_font('gothic.ttf', 20)
-    font_size_30 = load_font('gothic.ttf', 30)
+    font = load_font('font\\gothic.ttf', 20)
+    font_size_30 = load_font('font\\gothic.ttf', 30)
     cursor.x, cursor.y = x, y
     rooms = [Room() for i in range(7)]
     for i in range(0, 7):

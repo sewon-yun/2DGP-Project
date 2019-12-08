@@ -6,17 +6,17 @@ class Room:
 
     def __init__(self):
         if Room.image == None:
-            self.image = load_image('room_box.png')
-            self.image_hp_box = load_image('hp_box.png')
-            self.image_dark_elf = load_image('darkelf.png')
-            self.image_element = load_image('skill_4.png')
-            self.image_element1 = load_image('skill_5.png')
-            self.image_element2 = load_image('skill_6.png')
-            self.image_element3 = load_image('skill_10.png')
-            self.image_element4 = load_image('skill_11.png')
-            self.image_element5 = load_image('skill_1.png')
-            self.font = load_font('gothic.ttf', 25)
-            self.font_size_18 = load_font('gothic.ttf', 18)
+            self.image = load_image('image\\room_box.png')
+            self.image_hp_box = load_image('image\\hp_box.png')
+            self.image_dark_elf = load_image('character\\darkelf.png')
+            self.image_element = load_image('skill\\skill_4.png')
+            self.image_element1 = load_image('skill\\skill_5.png')
+            self.image_element2 = load_image('skill\\skill_6.png')
+            self.image_element3 = load_image('skill\\skill_10.png')
+            self.image_element4 = load_image('skill\\skill_11.png')
+            self.image_element5 = load_image('skill\\skill_1.png')
+            self.font = load_font('font\\gothic.ttf', 25)
+            self.font_size_18 = load_font('font\\gothic.ttf', 18)
         self.element = 0
         self.num = 0
         self.location = 0

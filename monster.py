@@ -8,18 +8,18 @@ image = None
 class Monster:
     def __init__(self):
         if image == None:
-            self.image_rabbit = load_image('rabbit.png')
-            self.image_samurai = load_image('samurai.png')
-            self.image_prophet = load_image('prophet.png')
-            self.image_rock = load_image('self-destructrock.png')
-            self.image_trent = load_image('trent.png')
-            self.image_durahan = load_image('durahan.png')
-            self.image_cyclops = load_image('cyclops.png')
-            self.image_budyfucker = load_image('budyfucker.png')
-            self.image_ancient = load_image('ancient.png')
-            self.image_phoenix = load_image('phoenix.png')
-            self.font = load_font('gothic.ttf', 20)
-            self.death_sound = load_wav('monster-growl1.wav')
+            self.image_rabbit = load_image('monster\\rabbit.png')
+            self.image_samurai = load_image('monster\\samurai.png')
+            self.image_prophet = load_image('monster\\prophet.png')
+            self.image_rock = load_image('monster\\self-destructrock.png')
+            self.image_trent = load_image('monster\\trent.png')
+            self.image_durahan = load_image('monster\\durahan.png')
+            self.image_cyclops = load_image('monster\\cyclops.png')
+            self.image_budyfucker = load_image('monster\\budyfucker.png')
+            self.image_ancient = load_image('monster\\ancient.png')
+            self.image_phoenix = load_image('monster\\phoenix.png')
+            self.font = load_font('font\\gothic.ttf', 20)
+            self.death_sound = load_wav('sound\\monster-growl1.wav')
             self.death_sound.set_volume(128)
         self.x, self.y = 425, 600
         self.hp, self.maxhp, self.barrior, self.shield, self.level = 100, 100, 0, 0, 1
