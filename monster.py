@@ -18,9 +18,12 @@ class Monster:
             self.image_budyfucker = load_image('monster\\budyfucker.png')
             self.image_ancient = load_image('monster\\ancient.png')
             self.image_phoenix = load_image('monster\\phoenix.png')
+            self.image_vampire = load_image('monster\\vampirelord.png')
             self.font = load_font('font\\gothic.ttf', 20)
             self.death_sound = load_wav('sound\\monster-growl1.wav')
             self.death_sound.set_volume(128)
+            self.attack_sound = load_wav('sound\\dart1.wav')
+            self.attack_sound.set_volume(32)
         self.x, self.y = 425, 600
         self.hp, self.maxhp, self.barrior, self.shield, self.level = 100, 100, 0, 0, 1
         self.name = '래빗'
@@ -50,6 +53,9 @@ class Monster:
                 self.image_ancient.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
             elif self.name == '불사조':
                 self.image_phoenix.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            elif self.name == '뱀파이어 로드':
+                self.image_vampire.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+                pass
         if (self.hp / self.maxhp) > 0:
             draw_rectangle(50, 610, 250, 640)
             fill_rectangle(50, 610, (self.hp / self.maxhp) * 200 + 50, 640)
@@ -58,10 +64,24 @@ class Monster:
         if self.shield > 0:
             draw_rectangle_rgb(50, 610, 250, 640, 0, 255, 0)
         self.font.draw(50, 675, '%s Lv%3.0f' % (self.name, self.level), (255, 255, 255))
-        self.font.draw(100, 625, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
+        # self.font.draw(100, 625, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
+        if self.maxhp < 1000 and self.barrior < 1000:
+            if self.barrior > 0:
+                self.font.draw(90, 625, '%3.0f / %3.0f + %1.0f' % (self.hp, self.maxhp, self.barrior), (255, 255, 0))
+                self.font.draw(90, 625, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
+            else:
+                self.font.draw(100, 625, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
+        else:
+            if self.barrior > 0:
+                self.font_size_15.draw(70, 625, '%3.0f / %3.0f + %1.0f' % (self.hp, self.maxhp, self.barrior),
+                                       (255, 255, 0))
+                self.font_size_15.draw(70, 625, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
+            else:
+                self.font_size_18.draw(90, 625, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
 
     @staticmethod
     def attack(monster, character):
+        monster.attack_sound.play(1)
         if character.barrior > 0:
             character.barrior -= random.randint(80, 120) / 100 * monster.attack_damage
             if character.barrior < 0:

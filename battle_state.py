@@ -100,6 +100,7 @@ def handle_events():
 def update():
     global turn, count, floor, floor_prograss, delay_time, bgm
     character.update()
+    print(character.experience)
     if turn % 2 == 1:
         if monster.isAlive:
             if delay_time >= 1.0:

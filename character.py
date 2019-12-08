@@ -270,18 +270,39 @@ class Character:
                 elif character.skills[i].sound == 2:
                     character.skills[i].bow_sound.play(1)
                 if random.randint(1, 100) <= character.critical_chance:
-                    monster.hp -= character.critical_damage * (character.strength * character.skills[i].strength +
-                                                               character.dexerity * character.skills[i].dexerity +
-                                                               character.faith * character.skills[i].faith +
-                                                               character.magic * character.skills[i].magic) * \
-                                                              (1.1 ** character.skills[i].level)
-
-                else:
-                    monster.hp -= random.randint(80, 120) / 100 * (character.strength * character.skills[i].strength +
+                    if monster.barrior > 0:
+                        monster.barrior -= character.critical_damage * (
+                                    character.strength * character.skills[i].strength +
+                                    character.dexerity * character.skills[i].dexerity +
+                                    character.faith * character.skills[i].faith +
+                                    character.magic * character.skills[i].magic) * \
+                                           (1.1 ** character.skills[i].level)
+                        if monster.barrior < 0:
+                            monster.barrior = 0
+                    else:
+                        monster.hp -= character.critical_damage * (character.strength * character.skills[i].strength +
                                                                    character.dexerity * character.skills[i].dexerity +
                                                                    character.faith * character.skills[i].faith +
                                                                    character.magic * character.skills[i].magic) * \
-                                                              (1.1 ** character.skills[i].level)
+                                                                  (1.1 ** character.skills[i].level)
+
+                else:
+                    if monster.barrior > 0:
+                        monster.barrior -= random.randint(80, 120) / 100 * (
+                                    character.strength * character.skills[i].strength +
+                                    character.dexerity * character.skills[i].dexerity +
+                                    character.faith * character.skills[i].faith +
+                                    character.magic * character.skills[i].magic) * \
+                                           (1.1 ** character.skills[i].level)
+                        if monster.barrior < 0:
+                            monster.barrior = 0
+                    else:
+                        monster.hp -= random.randint(80, 120) / 100 * (
+                                    character.strength * character.skills[i].strength +
+                                    character.dexerity * character.skills[i].dexerity +
+                                    character.faith * character.skills[i].faith +
+                                    character.magic * character.skills[i].magic) * \
+                                           (1.1 ** character.skills[i].level)
                 if monster.hp <= 0:
                     monster.hp = 0
                     monster.isAlive = False

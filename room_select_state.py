@@ -47,7 +47,7 @@ def create_monster():
     # list = [name, hp, barrior, shield, attack_damage, critical_chance, critical_damage, experience]
     #        [ 0     1     2        3          4               5                 6             7    ]
     global play_turn
-    level = int(play_turn / 10) + 1
+    level = int(play_turn / 3) + 1
     pick = random.randint(0, 8)
     battle_state.monster.name = game_data.monster_table[pick][0]
     battle_state.monster.hp = game_data.monster_table[pick][1] * (1.02 ** level)
@@ -66,8 +66,14 @@ def create_boss_monster():
     # list = [name, hp, barrior, shield, attack_damage, critical_chance, critical_damage, experience]
     #        [ 0     1     2        3          4               5                 6             7    ]
     global play_turn
-    level = int(play_turn / 10) + 6
-    pick = 0
+    level = int(play_turn / 3) + 6
+    if battle_state.floor < 4:
+        # pick = random.randint(0, 1)
+        pick = 1
+    elif battle_state.floor == 4:
+        pick = 3
+    else:
+        pick = 4
     battle_state.monster.name = game_data.boss_monster_table[pick][0]
     battle_state.monster.hp = game_data.boss_monster_table[pick][1] * (1.02 ** level)
     battle_state.monster.maxhp = game_data.boss_monster_table[pick][1] * (1.02 ** level)
