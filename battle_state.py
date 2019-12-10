@@ -29,14 +29,18 @@ hp_box = None
 rooms = None
 bgm = None
 boss_bgm = None
+lose_sound = None
 turn = 0
 count = 0
+cooldown_count = 0
 floor = 1
 floor_prograss = 0
 delay_time = 0.0
+death_time = 0.0
+switch = False
 
 def enter():
-    global background, character, monster, cursor, hp_box, turn, rooms, bgm, boss_bgm
+    global background, character, monster, cursor, hp_box, turn, rooms, bgm, boss_bgm, lose_sound
     cursor = Cursor()
     rooms = [Room() for i in range(7)]
     if hp_box == None:
@@ -49,6 +53,8 @@ def enter():
     bgm.repeat_play()
     boss_bgm = load_music('sound\\boss_music.mp3')
     boss_bgm.set_volume(64)
+    lose_sound = load_wav('sound\\lose.wav')
+    lose_sound.set_volume(128)
     turn = 0
     game_framework.push_state(room_select_state)
 
@@ -67,7 +73,7 @@ def resume():
 
 
 def handle_events():
-    global x, y, cursor, turn
+    global x, y, cursor, turn, cooldown_count
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -78,6 +84,14 @@ def handle_events():
             x, y = event.x, 800 - 1 - event.y
             cursor.x, cursor.y = x, y
         elif turn % 2 == 0:
+            for i in range(5):
+                if character.skills[i].current_cooldown:
+                    cooldown_count += 1
+                    if cooldown_count == 5:
+                        cooldown_count = 0
+                        turn += 1
+                else:
+                    cooldown_count = 0
             for i in range(5):
                 if event.type == SDL_MOUSEBUTTONDOWN and (5 + (i * 120) <= x <= 115 + (i * 120) and 70 <= y <= 170) \
                         and character.skills[i].isExist and character.isAlive:
@@ -98,20 +112,27 @@ def handle_events():
 
 
 def update():
-    global turn, count, floor, floor_prograss, delay_time, bgm
+    global turn, count, floor, floor_prograss, delay_time, bgm, death_time, switch, lose_sound
     character.update()
-    print(character.experience)
+    if not character.isAlive:
+        if not switch:
+            switch = True
+            lose_sound.play(1)
+            bgm.stop()
+        death_time += game_framework.frame_time
+        if death_time >= 4.0:
+            game_framework.change_state(game_over_state)
     if turn % 2 == 1:
         if monster.isAlive:
             if delay_time >= 1.0:
                 delay_time = 0.0
+                if rooms[0].electric_current:
+                    monster.attack(monster, character)
                 monster.attack(monster, character)
                 turn += 1
                 for i in range(5):
                     if character.skills[i].current_cooldown:
                         character.skills[i].current_cooldown -= 1
-                if character.hp <= 0:
-                    game_framework.change_state(game_over_state)
             else:
                 delay_time += game_framework.frame_time
         else:

@@ -35,6 +35,10 @@ def enter():
     pick = random.randint(0, 9)
     if pick == 4:
         pick += 1
+    if pick == 3:
+        pick = random.randint(0, 9)
+        if pick == 4:
+            pick += 1
     skill.create(pick)
     cursor.x, cursor.y = x, y
     select_times = 3

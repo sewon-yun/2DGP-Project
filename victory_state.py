@@ -39,7 +39,6 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_MOUSEMOTION:
             cursor.x, cursor.y = event.x, 800 - 1 - event.y
-            print(cursor.x, cursor.y)
         elif event.type == SDL_MOUSEBUTTONDOWN and 150 < cursor.x < 450 and 75 < cursor.y < 175:
             game_framework.change_state(battle_state)
 

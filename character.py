@@ -58,7 +58,7 @@ class Skill:
                 self.font_size_25.draw(420, 270, '%s' % self.name, (255, 255, 255))
             elif self.name == '완전 회복' or self.name == '상급 회복':
                 self.image_skill_8.clip_draw(80, 213, 60, 50, 450, 350, 110, 100)
-                self.font_size_25.draw(395, 270, '%s' % self.name, (255, 255, 255))
+                self.font_size_25.draw(400, 270, '%s' % self.name, (255, 255, 255))
             elif self.name == '정조준':
                 self.image_skill_1.clip_draw(80, 293, 60, 50, 450, 350, 110, 100)
                 self.font_size_25.draw(410, 270, '%s' % self.name, (0, 255, 0))
@@ -88,7 +88,7 @@ class Skill:
                         self.font_size_25.draw(110, 270, '%s' % self.name, (0, 255, 0))
                     elif self.name == '사격':
                         self.image_skill_7.clip_draw(335, 40, 60, 52, 150, 350, 100, 100)
-                        self.font_size_25.draw(120, 270, '%s' % self.name, (255, 255, 255))
+                        self.font_size_25.draw(120, 270, '%s' % self.name, (0, 255, 0))
                     elif self.name == '암습':
                         self.image_skill_7.clip_draw(270, 213, 60, 52, 150, 350, 100, 100)
                         self.font_size_25.draw(120, 270, '%s' % self.name, (0, 255, 0))
@@ -105,10 +105,10 @@ class Skill:
                             self.font.draw(self.slot * 120 + 40, 55, '%s' % self.name, (255, 255, 255))
                         elif self.name == '완전 회복' or self.name == '상급 회복':
                             self.image_skill_8.clip_draw(80, 213, 60, 50, 66 + self.slot * 120, 120 - 3, 110, 100)
-                            self.font.draw(self.slot * 120 + 13, 55, '%s' % self.name, (255, 255, 255))
+                            self.font.draw(self.slot * 120 + 16, 55, '%s' % self.name, (255, 255, 255))
                         elif self.name == '정조준':
                             self.image_skill_1.clip_draw(80, 293, 60, 50, 64 + self.slot * 120, 120 - 4, 110, 100)
-                            self.font.draw(self.slot * 120 + 25, 55, '%s' % self.name, (0, 255, 0))
+                            self.font.draw(self.slot * 120 + 28, 55, '%s' % self.name, (0, 255, 0))
                         elif self.name == '사격':
                             self.image_skill_7.clip_draw(335, 40, 60, 52, 61 + self.slot * 120, 120 - 3, 100, 100)
                             self.font.draw(self.slot * 120 + 40, 55, '%s' % self.name, (0, 255, 0))
@@ -157,10 +157,10 @@ class Skill:
                             self.font.draw(self.slot * 120 + 40, 55, '%s+%1.0f' % (self.name, self.level), (255, 255, 255))
                         elif self.name == '완전 회복' or self.name == '상급 회복':
                             self.image_skill_8.clip_draw(80, 213, 60, 50, 66 + self.slot * 120, 120 - 3, 110, 100)
-                            self.font.draw(self.slot * 120 + 13, 55, '%s+%1.0f' % (self.name, self.level), (255, 255, 255))
+                            self.font.draw(self.slot * 120 + 16, 55, '%s+%1.0f' % (self.name, self.level), (255, 255, 255))
                         elif self.name == '정조준':
                             self.image_skill_1.clip_draw(80, 293, 60, 50, 64 + self.slot * 120, 120 - 4, 110, 100)
-                            self.font.draw(self.slot * 120 + 25, 55, '%s+%1.0f' % (self.name, self.level), (0, 255, 0))
+                            self.font.draw(self.slot * 120 + 28, 55, '%s+%1.0f' % (self.name, self.level), (0, 255, 0))
                         elif self.name == '사격':
                             self.image_skill_7.clip_draw(335, 40, 60, 52, 61 + self.slot * 120, 120 - 3, 100, 100)
                             self.font.draw(self.slot * 120 + 40, 55, '%s+%1.0f' % (self.name, self.level), (0, 255, 0))
@@ -211,16 +211,15 @@ class Character:
         for i in range(5):
             self.skills[i].slot = i
         self.skills[0].create(0)
-        self.skills[1].create(7)
-        self.skills[2].create(2)
-        self.skills[3].create(1)
-        self.skills[4].create(3)
+        self.skills[1].create(2)
+        self.skills[2].create(1)
+        self.skills[3].create(6)
+        self.skills[4].create(7)
 
     def draw(self):
-        if self.isAlive:
-            self.image_dark_elf.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+        draw_rectangle(350, 210, 550, 240)
+        self.image_dark_elf.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
         if (self.hp / self.maxhp) > 0 and self.maxhp != 0:
-            draw_rectangle(350, 210, 550, 240)
             fill_rectangle(350, 210, (self.hp / self.maxhp) * 200 + 350, 240)
         if self.barrior > 0:
             draw_rectangle_rgb(350, 210, 550, 240, 255, 255, 0)
@@ -245,9 +244,9 @@ class Character:
             self.skills[i].draw()
 
     def update(self):
-        self.maxhp = (self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp) * 1.1 ** self.level
-        self.dexerity = (self.armor.dexerity + self.weapon.dexerity + self.accessory.dexerity) * 1.1 ** self.level
-        self.strength = (self.armor.strength + self.weapon.strength + self.accessory.strength) * 1.1 ** self.level
+        self.maxhp = (self.armor.maxhp + self.weapon.maxhp + self.accessory.maxhp) * (1.1 ** self.level)
+        self.dexerity = (self.armor.dexerity + self.weapon.dexerity + self.accessory.dexerity) * (1.05 ** self.level)
+        self.strength = (self.armor.strength + self.weapon.strength + self.accessory.strength) * (1.05 ** self.level)
 
     def level_up(self, n):
         global count
@@ -314,7 +313,7 @@ class Character:
         for i in range(5):
             if self.skills[i].isActive:
                 self.skills[i].heal_sound.play(1)
-                self.hp += self.skills[i].power * self.hp
+                self.hp += self.skills[i].power * self.maxhp
                 if self.hp > self.maxhp:
                     self.hp = self.maxhp
                 self.skills[i].isActive = False

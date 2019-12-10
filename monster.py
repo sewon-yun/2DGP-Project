@@ -19,7 +19,13 @@ class Monster:
             self.image_ancient = load_image('monster\\ancient.png')
             self.image_phoenix = load_image('monster\\phoenix.png')
             self.image_vampire = load_image('monster\\vampirelord.png')
+            self.image_death = load_image('monster\\death.png')
+            self.image_lilith = load_image('monster\\devilqueen.png')
+            self.image_concubine = load_image('monster\\bosswife.png')
+            self.image_king = load_image('monster\\boss.png')
             self.font = load_font('font\\gothic.ttf', 20)
+            self.font_size_15 = load_font('font\\gothic.ttf', 15)
+            self.font_size_18 = load_font('font\\gothic.ttf', 18)
             self.death_sound = load_wav('sound\\monster-growl1.wav')
             self.death_sound.set_volume(128)
             self.attack_sound = load_wav('sound\\dart1.wav')
@@ -55,22 +61,29 @@ class Monster:
                 self.image_phoenix.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
             elif self.name == '뱀파이어 로드':
                 self.image_vampire.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            elif self.name == '데스':
+                self.image_death.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            elif self.name == '릴리스':
+                self.image_lilith.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            elif self.name == '패왕의 첩':
+                self.image_concubine.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
+            elif self.name == '고대의 패왕':
+                self.image_king.clip_draw(0, 0, 800, 800, self.x, self.y, 300, 300)
                 pass
+        draw_rectangle(50, 610, 250, 640)
         if (self.hp / self.maxhp) > 0:
-            draw_rectangle(50, 610, 250, 640)
             fill_rectangle(50, 610, (self.hp / self.maxhp) * 200 + 50, 640)
         if self.barrior > 0:
             draw_rectangle_rgb(50, 610, 250, 640, 255, 255, 0)
         if self.shield > 0:
             draw_rectangle_rgb(50, 610, 250, 640, 0, 255, 0)
         self.font.draw(50, 675, '%s Lv%3.0f' % (self.name, self.level), (255, 255, 255))
-        # self.font.draw(100, 625, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
         if self.maxhp < 1000 and self.barrior < 1000:
             if self.barrior > 0:
                 self.font.draw(90, 625, '%3.0f / %3.0f + %1.0f' % (self.hp, self.maxhp, self.barrior), (255, 255, 0))
                 self.font.draw(90, 625, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
             else:
-                self.font.draw(100, 625, '%3.0f / %3.0f' % (self.hp, self.maxhp), (255, 255, 255))
+                self.font.draw(100, 625, '%3.0f / %1.0f' % (self.hp, self.maxhp), (255, 255, 255))
         else:
             if self.barrior > 0:
                 self.font_size_15.draw(70, 625, '%3.0f / %3.0f + %1.0f' % (self.hp, self.maxhp, self.barrior),

@@ -47,17 +47,17 @@ def create_monster():
     # list = [name, hp, barrior, shield, attack_damage, critical_chance, critical_damage, experience]
     #        [ 0     1     2        3          4               5                 6             7    ]
     global play_turn
-    level = int(play_turn / 3) + 1
+    level = int(play_turn / 5) + 1
     pick = random.randint(0, 8)
     battle_state.monster.name = game_data.monster_table[pick][0]
-    battle_state.monster.hp = game_data.monster_table[pick][1] * (1.02 ** level)
-    battle_state.monster.maxhp = game_data.monster_table[pick][1] * (1.02 ** level)
-    battle_state.monster.barrior = game_data.monster_table[pick][2] * (1.02 ** level)
-    battle_state.monster.shield = game_data.monster_table[pick][3] * (1.02 ** level)
-    battle_state.monster.attack_damage = game_data.monster_table[pick][4] * (1.02 ** level)
-    battle_state.monster.critical_chance = game_data.monster_table[pick][5] * (1.02 ** level)
-    battle_state.monster.critical_damage = game_data.monster_table[pick][6] * (1.02 ** level)
-    battle_state.monster.experience = game_data.monster_table[pick][7] * (1.02 ** level)
+    battle_state.monster.hp = game_data.monster_table[pick][1] * (1.05 ** level)
+    battle_state.monster.maxhp = game_data.monster_table[pick][1] * (1.05 ** level)
+    battle_state.monster.barrior = game_data.monster_table[pick][2] * (1.05 ** level)
+    battle_state.monster.shield = game_data.monster_table[pick][3] * (1.05 ** level)
+    battle_state.monster.attack_damage = game_data.monster_table[pick][4] * (1.05 ** level)
+    battle_state.monster.critical_chance = game_data.monster_table[pick][5] * (1.05 ** level)
+    battle_state.monster.critical_damage = game_data.monster_table[pick][6] * (1.05 ** level)
+    battle_state.monster.experience = game_data.monster_table[pick][7] * (1.05 ** level)
     battle_state.monster.level = level
     battle_state.monster.isAlive = True
 
@@ -66,14 +66,13 @@ def create_boss_monster():
     # list = [name, hp, barrior, shield, attack_damage, critical_chance, critical_damage, experience]
     #        [ 0     1     2        3          4               5                 6             7    ]
     global play_turn
-    level = int(play_turn / 3) + 6
+    level = int(play_turn / 5) + 6
     if battle_state.floor < 4:
-        # pick = random.randint(0, 1)
-        pick = 1
+        pick = random.randint(0, 3)
     elif battle_state.floor == 4:
-        pick = 3
-    else:
         pick = 4
+    else:
+        pick = 5
     battle_state.monster.name = game_data.boss_monster_table[pick][0]
     battle_state.monster.hp = game_data.boss_monster_table[pick][1] * (1.02 ** level)
     battle_state.monster.maxhp = game_data.boss_monster_table[pick][1] * (1.02 ** level)
@@ -182,6 +181,13 @@ def enter():
         create_room(1, 7)
     else:
         rooms = battle_state.rooms
+        if rooms[i].boss:
+            del rooms
+            rooms = [Room() for i in range(7)]
+            for i in range(0, 7):
+                rooms[i].num = i
+                rooms[i].x, rooms[i].y = room_location_table[i][0], room_location_table[i][1]
+            create_room(1, 7)
 
 
 def exit():
